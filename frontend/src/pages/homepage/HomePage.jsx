@@ -5,9 +5,8 @@ function Homepage() {
   return (
     <Box
       sx={{
-        bgcolor: "coral",
-        width: "fit-content",
-        mx: "auto",
+        width: "50%",
+        margin: "0 auto",
         display: "flex",
         alignItems: "center",
       }}

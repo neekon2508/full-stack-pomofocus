@@ -1,5 +1,10 @@
+import NavButton from "../common/nav-button/NavButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 function Menu() {
-  return <div>Menu</div>;
+  function handleOnClick() {
+    console.log("Menu clicked");
+  }
+  return <NavButton icon={MoreVertIcon} label="" onClick={handleOnClick} />;
 }
 
 export default Menu;
