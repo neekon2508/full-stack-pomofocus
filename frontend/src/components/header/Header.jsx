@@ -14,8 +14,8 @@ function Header() {
     alert("Clicked");
   }
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -29,13 +29,13 @@ function Header() {
         title="Pomofocus"
         onClick={handleOnClick}
       />
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <Report />
         <Setting />
         {isLogin ? "Logined" : <LoginButton />}
         <Menu />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
