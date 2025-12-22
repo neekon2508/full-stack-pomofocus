@@ -3,7 +3,6 @@ import Header from "../../components/header/Header";
 import Session from "../../components/session/Session";
 import Tasks from "../../components/task-list/TaskList";
 import Summary from "../../components/summary/Summary";
-import Counter from "../../components/counter/Counter";
 
 function Homepage() {
   return (
@@ -17,7 +16,6 @@ function Homepage() {
       <Divider sx={{ padding: "50px 0" }} />
       <Box sx={{ width: "80%", margin: "0 auto", padding: "50px 0" }}>
         <Session />
-        <Counter />
         <Tasks />
         <Summary />
       </Box>

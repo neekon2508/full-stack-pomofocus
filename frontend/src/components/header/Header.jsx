@@ -5,7 +5,7 @@ import Report from "../report/report";
 import Setting from "../setting/setting";
 import { useState } from "react";
 import LoginButton from "../login-button/LoginButton";
-import Menu from "../menu/Menu";
+import Menu from "../menu/MenuButton";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);

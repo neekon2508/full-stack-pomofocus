@@ -1,5 +1,6 @@
-import { Box, Button, duration, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
 
 function Session() {
   const sessions = [
@@ -12,99 +13,146 @@ function Session() {
   const [active, setActive] = useState(0);
   const [duration, setDuration] = useState(durations[0]);
   const [isStart, setIsStart] = useState(false);
+  const [count, setCount] = useState(() => {
+    const savedCount = localStorage.getItem("pomoCount");
+    return savedCount ? Number(savedCount) : 1;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("pomoCount", count);
+  }, [count]);
+
+  useEffect(() => {
+    setDuration(sessions[active].duration);
+    setIsStart(false);
+  }, [active]);
+
   useEffect(() => {
     let interval = null;
 
-    // Nếu đang ở trạng thái Active và thời gian > 0 thì mới chạy bộ đếm
     if (isStart && duration > 0) {
       interval = setInterval(() => {
-        setDuration((prevSeconds) => prevSeconds - 1);
+        setDuration((pre) => pre - 1);
       }, 1000);
     } else if (duration === 0) {
-      // Tự động dừng khi về 0
-      setIsStart(false);
       clearInterval(interval);
+      handleOnClickSkip();
     }
 
-    // Dọn dẹp bộ nhớ
     return () => clearInterval(interval);
-  }, [isStart, duration]);
+  }, [isStart, duration, active]);
 
   function handleOnClickTab(index) {
     setActive(index);
-    setDuration(
-      sessions.find((session) => session.type === types[index]).duration
-    );
   }
 
   function handleOnClickCountDown() {
     setIsStart((value) => !value);
   }
+
+  function handleOnClickSkip() {
+    setIsStart(false);
+    if (active === 0) setCount((pre) => pre + 1);
+    setActive((pre) => (pre < 2 ? pre + 1 : 0));
+  }
+
   return (
-    <Box
-      sx={{
-        backgroundColor: "rgba(255, 255, 255, 0.2)",
-        padding: "20px 0",
-        borderRadius: "10px",
-        textAlign: "center",
-        transition: "background-color 0.5s ease",
-      }}
-    >
-      <Stack direction="row" spacing={1} justifyContent="center">
-        {types.map((val, index) => {
-          console.log(index, val);
-          return (
-            <Button
-              key={index}
-              onClick={() => handleOnClickTab(index)}
+    <>
+      <Box
+        sx={{
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
+          padding: "20px 0",
+          borderRadius: "10px",
+          textAlign: "center",
+          transition: "background-color 0.5s ease",
+        }}
+      >
+        <Stack direction="row" spacing={1} justifyContent="center">
+          {types.map((val, index) => {
+            return (
+              <Button
+                key={index}
+                onClick={() => handleOnClickTab(index)}
+                sx={{
+                  color: "white",
+                  fontWeight: active === index ? "bold" : "normal",
+                  backgroundColor:
+                    active === index ? "rgba(0, 0, 0, 0.15)" : "transparent",
+                  borderRadius: "4px",
+                  px: 2,
+                }}
+              >
+                {val}
+              </Button>
+            );
+          })}
+        </Stack>
+
+        <Typography
+          variant="h1"
+          sx={{
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          {`${Math.floor(duration / 60)}`.padStart(2, 0)}:
+          {`${duration % 60}`.padStart(2, 0)}
+        </Typography>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+            minHeight: "60px",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleOnClickCountDown}
+            sx={{
+              backgroundColor: "white",
+              color: "background.default",
+              fontSize: "22px",
+              fontWeight: "bold",
+              borderRadius: "4px",
+              boxShadow: "rgb(235, 235, 235) 0px 6px 0px",
+              "&:hover": {
+                backgroundColor: "#f0f0f0",
+              },
+              "&:active": {
+                boxShadow: "none",
+                transform: "translateY(6px)",
+              },
+            }}
+          >
+            {isStart ? "PAUSE" : "START"}
+          </Button>
+          {isStart && (
+            <IconButton
+              onClick={handleOnClickSkip}
+              size="large"
               sx={{
+                position: "absolute",
+                right: { xs: "10%", md: "20%" },
                 color: "white",
-                fontWeight: active === index ? "bold" : "normal",
-                backgroundColor:
-                  active === index ? "rgba(0, 0, 0, 0.15)" : "transparent",
-                borderRadius: "4px",
-                px: 2,
               }}
             >
-              {val}
-            </Button>
-          );
-        })}
-      </Stack>
-
-      <Typography
-        variant="h1"
-        sx={{
-          color: "white",
-          fontWeight: "bold",
-        }}
-      >
-        {`${Math.floor(duration / 60)}`.padStart(2, 0)}:
-        {`${duration % 60}`.padStart(2, 0)}
-      </Typography>
-
-      <Button
-        variant="contained"
-        onClick={handleOnClickCountDown}
-        sx={{
-          backgroundColor: "white",
-          color: "background.default",
-          fontSize: "22px",
-          fontWeight: "bold",
-          borderRadius: "4px",
-          boxShadow: "rgb(235, 235, 235) 0px 6px 0px",
-          "&:hover": {
-            backgroundColor: "#f0f0f0",
-          },
-          "&:active": {
-            boxShadow: "none",
-            transform: "translateY(6px)", // Nhấn xuống khi click
-          },
-        }}
-      >
-        {isStart ? "PAUSE" : "START"}
-      </Button>
-    </Box>
+              <SkipNextIcon sx={{ fontSize: "40px" }} />
+            </IconButton>
+          )}
+        </div>
+      </Box>
+      <Box textAlign="center" padding="10px">
+        <Typography variant="h5" color="#f2f2ff">
+          #{count}
+        </Typography>
+        <Typography variant="h5" color="white">
+          Pomofocus project
+        </Typography>
+      </Box>
+    </>
   );
 }
 
