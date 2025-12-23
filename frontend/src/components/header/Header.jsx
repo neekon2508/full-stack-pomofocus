@@ -5,7 +5,7 @@ import Report from "../report/report";
 import Setting from "../setting/setting";
 import { useState } from "react";
 import LoginButton from "../login-button/LoginButton";
-import Menu from "../menu/MenuButton";
+import MenuButton from "../menu/MenuButton";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
@@ -33,7 +33,7 @@ function Header() {
         <Report />
         <Setting />
         {isLogin ? "Logined" : <LoginButton />}
-        <Menu />
+        <MenuButton />
       </Box>
     </Box>
   );

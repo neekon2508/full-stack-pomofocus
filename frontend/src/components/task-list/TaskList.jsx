@@ -3,44 +3,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useState } from "react";
 import TaskItem from "../task-item/TaskItem";
+import TaskInput from "../task-input/TaskInput";
+import { usePomos } from "../../contexts/PomoContext";
 
 function TaskList() {
-  const initialTasks = [
-    {
-      id: 1,
-      title: "Spring Framework Essentials",
-      completed: 10,
-      total: 15,
-      isDone: false,
-    },
-    { id: 2, title: "Pro Spring", completed: 7, total: 20, isDone: false },
-    {
-      id: 3,
-      title: "SQL Certified Associate",
-      completed: 0,
-      total: 20,
-      isDone: false,
-    },
-    { id: 4, title: "Algorithms", completed: 9, total: 50, isDone: false },
-    { id: 5, title: "Git", completed: 2, total: 10, isDone: false },
-    { id: 6, title: "React", completed: 22, total: 30, isDone: false },
-    {
-      id: 7,
-      title: "Pomofocus project",
-      completed: 1,
-      total: 20,
-      isDone: true,
-    },
-  ];
-
-  const [tasks, setTasks] = useState(initialTasks);
-
+  const { tasks, isLoading, dispatch } = usePomos();
+  const [isShowAddTask, setIsShowAddTask] = useState(false);
   function handleToggleTask(id) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, isDone: !task.isDone } : task
-      )
-    );
+    dispatch({ type: "task/toggle", payload: id });
   }
 
   return (
@@ -74,27 +44,38 @@ function TaskList() {
           <TaskItem key={task.id} task={task} onToggle={handleToggleTask} />
         ))}
       </Stack>
-      <Button
-        fullWidth
-        startIcon={<AddCircleIcon />}
-        sx={{
-          marginTop: "16px",
-          backgroundColor: "rgba(0, 0, 0, 0.1)",
-          border: "2px dashed rgba(255, 255, 255, 0.4)",
-          color: "white",
-          fontWeight: "bold",
-          fontSize: "18px",
-          padding: "12px",
-          borderRadius: "6px",
-          textTransform: "none",
-          "&:hover": {
-            backgroundColor: "rgba(0, 0, 0, 0.15)",
-            border: "2px dashed rgba(255, 255, 255, 0.6)",
-          },
-        }}
-      >
-        Add Task
-      </Button>
+      {!isShowAddTask ? (
+        <Button
+          fullWidth
+          startIcon={<AddCircleIcon />}
+          onClick={() => {
+            setIsShowAddTask(true);
+          }}
+          sx={{
+            marginTop: "16px",
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            border: "2px dashed rgba(255, 255, 255, 0.4)",
+            color: "white",
+            fontWeight: "bold",
+            fontSize: "18px",
+            padding: "12px",
+            borderRadius: "6px",
+            textTransform: "none",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.15)",
+              border: "2px dashed rgba(255, 255, 255, 0.6)",
+            },
+          }}
+        >
+          Add Task
+        </Button>
+      ) : (
+        <TaskInput
+          onCancel={() => {
+            setIsShowAddTask(false);
+          }}
+        />
+      )}
     </>
   );
 }

@@ -1,10 +1,122 @@
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useState } from "react";
+import { usePomos } from "../../contexts/PomoContext";
+import { useForm } from "react-hook-form";
+import { v4 as uuid } from "uuid";
 
-function TaskInput() {
+function TaskInput({ onCancel }) {
+  const { dispatch } = usePomos();
+  const [number, setNumber] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { error },
+    reset,
+  } = useForm();
+
+  function onSubmit(data) {
+    console.log("Form Data: ", data);
+    dispatch({
+      type: "task/create",
+      payload: {
+        id: uuid(),
+        title: data.title,
+        total: data.total,
+        completed: 0,
+        isDone: false,
+      },
+    });
+    onCancel();
+  }
+  function handleChange(e) {
+    const val = e.target.value;
+    if (val === "" || /^[0-9\b]+$/.test(val)) {
+      setNumber(val === "" ? "" : parseInt(val, 10));
+    }
+  }
+
+  function handleIncrease() {
+    setNumber((pre) => pre + 1);
+  }
+
+  function handleDecrease() {
+    setNumber((pre) => pre - 1);
+  }
+
   return (
-    <Box sx={{ width: "100%", backgroundColor: "white" }}>
-      <input placeholder="What are you working on?" />
-      <Typography variant="h5">Est Pomodoros</Typography>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        width: "100%",
+        backgroundColor: "white",
+        marginTop: "10px",
+        padding: "20px",
+        borderRadius: "10px",
+        width: "100%",
+      }}
+    >
+      <TextField
+        name="title"
+        placeholder="What are you working?"
+        {...register("title")}
+        width="100%"
+        sx={{
+          "& fieldset": { border: "none" },
+
+          "& .MuiInputBase-root": {
+            fontSize: "24px",
+          },
+          "& .MuiInputBase-input::placeholder": {
+            fontStyle: "italic",
+            color: "rgba(0, 0, 0, 0.4)",
+            fontWeight: "500",
+            opacity: 1,
+          },
+        }}
+      />
+      <Typography variant="body1" fontWeight={500}>
+        Est Pomodoros
+      </Typography>
+      <Stack direction="row" sx={{ padding: "10px 0" }}>
+        <TextField
+          name="total"
+          {...register("total")}
+          value={number}
+          onChange={handleChange}
+          sx={{
+            width: "10%",
+            backgroundColor: "rgb(0,0,0,0.1)",
+            borderRadius: "10px",
+            "& .MuiInputBase-root": {
+              fontSize: "15px",
+            },
+            "& fieldset": { border: "none" },
+          }}
+        />
+
+        <IconButton size="small" onClick={handleIncrease}>
+          <KeyboardArrowUpIcon />
+        </IconButton>
+        <IconButton size="small" onClick={handleDecrease}>
+          <KeyboardArrowDownIcon />
+        </IconButton>
+      </Stack>
+      <Stack direction="row" spacing={2}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button type="submit" variant="contained">
+          Save
+        </Button>
+      </Stack>
     </Box>
   );
 }

@@ -5,8 +5,11 @@ import MenuItem from "@mui/material/MenuItem";
 import LoginIcon from "@mui/icons-material/Login";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { useState } from "react";
+import ShortcutModal from "../shortcut-modal/ShortcutModal";
+import { useNavigate } from "react-router-dom";
 
 function MenuButton() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleOnClick = (event) => {
@@ -15,6 +18,8 @@ function MenuButton() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [openShortcuts, setOpenShortcuts] = useState(false);
 
   return (
     <>
@@ -34,15 +39,28 @@ function MenuButton() {
         }}
         sx={{ mt: "10px" }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
           <LoginIcon sx={{ paddingRight: " 5px" }} />
           Login
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            setOpenShortcuts(true);
+            handleClose();
+          }}
+        >
           <KeyboardIcon sx={{ paddingRight: " 5px" }} />
           Shortcuts
         </MenuItem>
       </Menu>
+      <ShortcutModal
+        open={openShortcuts}
+        handleClose={() => setOpenShortcuts(false)}
+      />
     </>
   );
 }
