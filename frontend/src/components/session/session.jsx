@@ -1,13 +1,10 @@
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import { usePomos } from "../../contexts/PomoContext";
 
 function Session() {
-  const sessions = [
-    { type: "Pomodoro", duration: 1500 },
-    { type: "Short Break", duration: 300 },
-    { type: "Long Break", duration: 900 },
-  ];
+  const { sessions, selectedTaskId, tasks, dispatch } = usePomos();
   const types = sessions.map((session) => session.type);
   const durations = sessions.map((session) => session.duration);
   const [active, setActive] = useState(0);
@@ -17,6 +14,8 @@ function Session() {
     const savedCount = localStorage.getItem("pomoCount");
     return savedCount ? Number(savedCount) : 1;
   });
+
+  const [pomoCount, setPomoCount] = useState(0);
 
   useEffect(() => {
     localStorage.setItem("pomoCount", count);
@@ -52,8 +51,25 @@ function Session() {
 
   function handleOnClickSkip() {
     setIsStart(false);
-    if (active === 0) setCount((pre) => pre + 1);
-    setActive((pre) => (pre < 2 ? pre + 1 : 0));
+
+    if (active === 0) {
+      dispatch({
+        type: "task/update",
+        payload: {
+          id: selectedTaskId,
+          completed: tasks.find((t) => t.id === selectedTaskId).completed + 1,
+        },
+      });
+      console.log(tasks.find((t) => t.id === selectedTaskId));
+      setCount((pre) => pre + 1);
+      if (pomoCount < 1) {
+        setPomoCount((pre) => pre + 1);
+        setActive(1);
+      } else {
+        setPomoCount(0);
+        setActive(2);
+      }
+    } else setActive(0);
   }
 
   return (
@@ -149,7 +165,9 @@ function Session() {
           #{count}
         </Typography>
         <Typography variant="h5" color="white">
-          Pomofocus project
+          {selectedTaskId
+            ? tasks.find((t) => t.id === selectedTaskId).title
+            : "Pomofocus project"}
         </Typography>
       </Box>
     </>

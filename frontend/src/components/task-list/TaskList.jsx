@@ -1,17 +1,36 @@
-import { Button, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useState } from "react";
 import TaskItem from "../task-item/TaskItem";
 import TaskInput from "../task-input/TaskInput";
 import { usePomos } from "../../contexts/PomoContext";
-
+import Summary from "../summary/Summary";
+import DeleteIcon from "@mui/icons-material/Delete";
 function TaskList() {
-  const { tasks, isLoading, dispatch } = usePomos();
+  const { tasks, selectedTaskId, isLoading, dispatch } = usePomos();
   const [isShowAddTask, setIsShowAddTask] = useState(false);
+
   function handleToggleTask(id) {
     dispatch({ type: "task/toggle", payload: id });
   }
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleOnClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -29,6 +48,7 @@ function TaskList() {
           Tasks
         </Typography>
         <IconButton
+          onClick={handleOnClick}
           sx={{
             backgroundColor: "rgba(255, 255, 255, 0.2)",
             "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.3)" },
@@ -38,10 +58,49 @@ function TaskList() {
         >
           <MoreVertIcon sx={{ color: "white" }} />
         </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          sx={{ mt: "10px" }}
+        >
+          <MenuItem
+            onClick={() => {
+              dispatch({ type: "task/deleteCompleted" });
+            }}
+          >
+            <DeleteIcon />
+            <Typography>Clear finished tasks</Typography>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              dispatch({ type: "task/deleteAll" });
+              handleClose();
+            }}
+          >
+            <DeleteIcon />
+            <Typography>Clear all tasks</Typography>
+          </MenuItem>
+        </Menu>
       </Stack>
       <Stack spacing={1.5}>
         {tasks.map((task) => (
-          <TaskItem key={task.id} task={task} onToggle={handleToggleTask} />
+          <TaskItem
+            key={task.id}
+            task={task}
+            onToggle={handleToggleTask}
+            selectedId={selectedTaskId}
+            onClick={dispatch}
+          />
         ))}
       </Stack>
       {!isShowAddTask ? (
@@ -76,6 +135,7 @@ function TaskList() {
           }}
         />
       )}
+      {tasks.length > 0 && <Summary />}
     </>
   );
 }

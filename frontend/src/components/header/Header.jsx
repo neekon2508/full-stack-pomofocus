@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import Logo from "../logo/Logo";
-import { useNavigate } from "react-router-dom";
 import Report from "../report/report";
 import Setting from "../setting/setting";
 import { useState } from "react";
@@ -9,10 +8,7 @@ import MenuButton from "../menu/MenuButton";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
-  const navigate = useNavigate();
-  function handleOnClick() {
-    alert("Clicked");
-  }
+
   return (
     <Box
       sx={{
@@ -23,12 +19,7 @@ function Header() {
         padding: "10px",
       }}
     >
-      <Logo
-        fontSize="2rem"
-        color="primary.logo"
-        title="Pomofocus"
-        onClick={handleOnClick}
-      />
+      <Logo fontSize="2rem" color="primary.logo" title="Pomofocus" />
       <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <Report />
         <Setting />

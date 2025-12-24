@@ -48,20 +48,40 @@ const initialState = {
     //   isDone: true,
     // },
   ],
+  selectedTaskId: null,
+  sessions: [
+    { type: "Pomodoro", duration: 1500 },
+    { type: "Short Break", duration: 300 },
+    { type: "Long Break", duration: 900 },
+  ],
   isLoading: false,
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case "task/create":
-      return { ...state, tasks: [...state.tasks, action.payload] };
-    case "task/updateCount":
       return {
         ...state,
-        tasks: state.tasks.map((t) =>
-          t.id === action.payload.id ? { ...t, completed: t.completed + 1 } : t
-        ),
+        selectedTaskId:
+          state.tasks.length === 0 ? action.payload.id : state.selectedTaskId,
+        tasks: [...state.tasks, action.payload],
       };
+    case "task/update":
+      return {
+        ...state,
+        tasks: state.tasks.map((t) => {
+          if (t.id === action.payload.id) {
+            const updatedTask = { ...t, ...action.payload };
+
+            return {
+              ...updatedTask,
+              isDone: updatedTask.completed >= updatedTask.total ? true : false,
+            };
+          }
+          return t;
+        }),
+      };
+
     case "task/toggle":
       return {
         ...state,
@@ -69,16 +89,36 @@ function reducer(state, action) {
           t.id === action.payload ? { ...t, isDone: !t.isDone } : t
         ),
       };
+    case "task/deleteAll":
+      return {
+        ...state,
+        tasks: [],
+        selectedTaskId: null,
+      };
+    case "task/deleteCompleted":
+      const newTasks = state.tasks.filter((t) => t.isDone === false);
+      return {
+        ...state,
+        tasks: newTasks,
+        selectedTaskId: newTasks.length > 0 ? newTasks[0].id : null,
+      };
+    case "selectedTaskId/update":
+      return { ...state, selectedTaskId: action.payload };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function PomoProvider({ children }) {
-  const [{ tasks, isLoading }, dispatch] = useReducer(reducer, initialState);
+  const [{ tasks, selectedTaskId, sessions, isLoading }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   return (
-    <PomoContext.Provider value={{ tasks, isLoading, dispatch }}>
+    <PomoContext.Provider
+      value={{ tasks, selectedTaskId, sessions, isLoading, dispatch }}
+    >
       {children}
     </PomoContext.Provider>
   );

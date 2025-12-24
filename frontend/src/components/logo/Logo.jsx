@@ -1,14 +1,20 @@
 import { Box } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-function Logo({ fontSize, onClick, title, color }) {
+import { useNavigate } from "react-router-dom";
+function Logo({ fontSize, title, color }) {
+  const navigate = useNavigate();
+
+  const handleOnClick = () => {
+    navigate("/");
+  };
   return (
     <Box
-      onClick={onClick}
+      onClick={handleOnClick}
       sx={{
         display: "flex",
         alignItems: "center",
         gap: 1,
-        cursor: onClick ? "pointer" : "default",
+        cursor: handleOnClick ? "pointer" : "default",
         color: { color },
       }}
     >

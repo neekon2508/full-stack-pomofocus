@@ -12,6 +12,8 @@ import { useState } from "react";
 import { usePomos } from "../../contexts/PomoContext";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
+import { ErrorMessage } from "@hookform/error-message";
 
 function TaskInput({ onCancel }) {
   const { dispatch } = usePomos();
@@ -19,12 +21,11 @@ function TaskInput({ onCancel }) {
   const {
     register,
     handleSubmit,
-    formState: { error },
-    reset,
+    formState: { errors },
   } = useForm();
+  const ref = useOutsideClick(onCancel);
 
   function onSubmit(data) {
-    console.log("Form Data: ", data);
     dispatch({
       type: "task/create",
       payload: {
@@ -56,19 +57,19 @@ function TaskInput({ onCancel }) {
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
+      ref={ref}
       sx={{
         width: "100%",
         backgroundColor: "white",
         marginTop: "10px",
         padding: "20px",
         borderRadius: "10px",
-        width: "100%",
       }}
     >
       <TextField
         name="title"
         placeholder="What are you working?"
-        {...register("title")}
+        {...register("title", { required: "This is required" })}
         width="100%"
         sx={{
           "& fieldset": { border: "none" },
@@ -84,13 +85,22 @@ function TaskInput({ onCancel }) {
           },
         }}
       />
+      <ErrorMessage
+        errors={errors}
+        name="title"
+        render={({ message }) => (
+          <Box component="p" color="red" fontWeight={500}>
+            {message}
+          </Box>
+        )}
+      />
       <Typography variant="body1" fontWeight={500}>
         Est Pomodoros
       </Typography>
       <Stack direction="row" sx={{ padding: "10px 0" }}>
         <TextField
           name="total"
-          {...register("total")}
+          {...register("total", { required: "This is required" })}
           value={number}
           onChange={handleChange}
           sx={{
@@ -111,12 +121,31 @@ function TaskInput({ onCancel }) {
           <KeyboardArrowDownIcon />
         </IconButton>
       </Stack>
-      <Stack direction="row" spacing={2}>
-        <Button onClick={onCancel}>Cancel</Button>
-        <Button type="submit" variant="contained">
-          Save
-        </Button>
-      </Stack>
+      <ErrorMessage
+        errors={errors}
+        name="total"
+        render={({ message }) => (
+          <Box component="p" color="red" fontWeight={500}>
+            {message}
+          </Box>
+        )}
+      />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box></Box>
+        <Stack direction="row" spacing={2}>
+          <Box>
+            <Button onClick={onCancel}>Cancel</Button>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </Box>
+        </Stack>
+      </Box>
     </Box>
   );
 }

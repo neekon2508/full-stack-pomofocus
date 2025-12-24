@@ -1,18 +1,31 @@
-import { Box, Checkbox, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-function TaskItem({ task, onToggle }) {
+import { useState } from "react";
+function TaskItem({ task, onToggle, selectedId, onClick: dispatch }) {
   return (
     <Box
+      onClick={() => {
+        dispatch({ type: "selectedTaskId/update", payload: task.id });
+      }}
       sx={{
+        cursor: dispatch ? "pointer" : "default",
         backgroundColor: "white",
         borderRadius: "6px",
         padding: "12px 16px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        borderLeft: task.isDone ? "4px solid black" : "none",
+        borderLeft: task.id === selectedId ? "4px solid black" : "none",
       }}
     >
       <Stack
