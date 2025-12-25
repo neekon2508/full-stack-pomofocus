@@ -1,30 +1,36 @@
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import { usePomos } from "../../contexts/PomoContext";
+import { getBgColor } from "../../utils/theme-color-util";
 
 function Session() {
-  const { sessions, selectedTaskId, tasks, dispatch } = usePomos();
-  const types = sessions.map((session) => session.type);
-  const durations = sessions.map((session) => session.duration);
-  const [active, setActive] = useState(0);
-  const [duration, setDuration] = useState(durations[0]);
-  const [isStart, setIsStart] = useState(false);
-  const [count, setCount] = useState(() => {
-    const savedCount = localStorage.getItem("pomoCount");
-    return savedCount ? Number(savedCount) : 1;
-  });
+  const theme = useTheme();
+  const {
+    sessions,
+    sessionActiveId: active,
+    selectedTaskId,
+    tasks,
+    dispatch,
+  } = usePomos();
 
+  const currentSession = sessions[active];
+  const [duration, setDuration] = useState(currentSession.duration);
+  const [isStart, setIsStart] = useState(false);
+  const [count, setCount] = useState(0);
   const [pomoCount, setPomoCount] = useState(0);
 
   useEffect(() => {
-    localStorage.setItem("pomoCount", count);
-  }, [count]);
-
-  useEffect(() => {
-    setDuration(sessions[active].duration);
+    setDuration(currentSession.duration);
     setIsStart(false);
-  }, [active]);
+  }, [active, currentSession.duration]);
 
   useEffect(() => {
     let interval = null;
@@ -39,10 +45,10 @@ function Session() {
     }
 
     return () => clearInterval(interval);
-  }, [isStart, duration, active]);
+  }, [isStart, duration]);
 
   function handleOnClickTab(index) {
-    setActive(index);
+    dispatch({ type: "sessionActiveId/update", payload: index });
   }
 
   function handleOnClickCountDown() {
@@ -53,23 +59,29 @@ function Session() {
     setIsStart(false);
 
     if (active === 0) {
-      dispatch({
-        type: "task/update",
-        payload: {
-          id: selectedTaskId,
-          completed: tasks.find((t) => t.id === selectedTaskId).completed + 1,
-        },
-      });
-      console.log(tasks.find((t) => t.id === selectedTaskId));
       setCount((pre) => pre + 1);
+
+      const currentTask = tasks.find((t) => t.id === selectedTaskId);
+      if (selectedTaskId !== null && currentTask) {
+        dispatch({
+          type: "task/update",
+          payload: {
+            id: selectedTaskId,
+            completed: currentTask.completed + 1,
+          },
+        });
+      }
+
       if (pomoCount < 1) {
         setPomoCount((pre) => pre + 1);
-        setActive(1);
+        handleOnClickTab(1);
       } else {
         setPomoCount(0);
-        setActive(2);
+        handleOnClickTab(2);
       }
-    } else setActive(0);
+    } else {
+      handleOnClickTab(0);
+    }
   }
 
   return (
@@ -84,21 +96,20 @@ function Session() {
         }}
       >
         <Stack direction="row" spacing={1} justifyContent="center">
-          {types.map((val, index) => {
+          {sessions.map((session, index) => {
             return (
               <Button
-                key={index}
+                key={session.id}
                 onClick={() => handleOnClickTab(index)}
                 sx={{
                   color: "white",
                   fontWeight: active === index ? "bold" : "normal",
                   backgroundColor:
                     active === index ? "rgba(0, 0, 0, 0.15)" : "transparent",
-                  borderRadius: "4px",
-                  px: 2,
+                  textTransform: "none",
                 }}
               >
-                {val}
+                {session.type}
               </Button>
             );
           })}
@@ -111,8 +122,8 @@ function Session() {
             fontWeight: "bold",
           }}
         >
-          {`${Math.floor(duration / 60)}`.padStart(2, 0)}:
-          {`${duration % 60}`.padStart(2, 0)}
+          {`${Math.floor(duration / 60)}`.padStart(2, "0")}:
+          {`${duration % 60}`.padStart(2, "0")}
         </Typography>
         <div
           style={{
@@ -121,7 +132,7 @@ function Session() {
             justifyContent: "center",
             alignItems: "center",
             position: "relative",
-            minHeight: "60px",
+            minHeight: "64px",
           }}
         >
           <Button
@@ -129,14 +140,12 @@ function Session() {
             onClick={handleOnClickCountDown}
             sx={{
               backgroundColor: "white",
-              color: "background.default",
+              color: getBgColor(theme, active),
               fontSize: "22px",
               fontWeight: "bold",
               borderRadius: "4px",
               boxShadow: "rgb(235, 235, 235) 0px 6px 0px",
-              "&:hover": {
-                backgroundColor: "#f0f0f0",
-              },
+
               "&:active": {
                 boxShadow: "none",
                 transform: "translateY(6px)",
@@ -145,19 +154,21 @@ function Session() {
           >
             {isStart ? "PAUSE" : "START"}
           </Button>
-          {isStart && (
-            <IconButton
-              onClick={handleOnClickSkip}
-              size="large"
-              sx={{
-                position: "absolute",
-                right: { xs: "10%", md: "20%" },
-                color: "white",
-              }}
-            >
-              <SkipNextIcon sx={{ fontSize: "40px" }} />
-            </IconButton>
-          )}
+
+          <IconButton
+            onClick={handleOnClickSkip}
+            size="large"
+            sx={{
+              position: "absolute",
+              right: { xs: "10%", md: "20%" },
+              color: "white",
+              opacity: isStart ? 1 : 0,
+              visibility: isStart ? "visible" : "hidden",
+              transition: "opacity 0.2s ease",
+            }}
+          >
+            <SkipNextIcon sx={{ fontSize: "40px" }} />
+          </IconButton>
         </div>
       </Box>
       <Box textAlign="center" padding="10px">

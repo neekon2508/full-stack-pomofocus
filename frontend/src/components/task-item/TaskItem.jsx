@@ -11,7 +11,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
-function TaskItem({ task, onToggle, selectedId, onClick: dispatch }) {
+import TaskInput from "../task-input/TaskInput";
+import { usePomos } from "../../contexts/PomoContext";
+function TaskItem({ task, onToggle, selectedId, onClickEdit }) {
+  const { dispatch } = usePomos();
   return (
     <Box
       onClick={() => {
@@ -65,6 +68,10 @@ function TaskItem({ task, onToggle, selectedId, onClick: dispatch }) {
           {task.completed}/{task.total}
         </Typography>
         <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onClickEdit();
+          }}
           sx={{
             border: "1px solid #dfdfdf",
             borderRadius: "4px",

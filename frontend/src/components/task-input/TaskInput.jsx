@@ -14,29 +14,46 @@ import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { ErrorMessage } from "@hookform/error-message";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function TaskInput({ onCancel }) {
+function TaskInput({ onCancel, isEdit, task }) {
   const { dispatch } = usePomos();
-  const [number, setNumber] = useState("");
+  const [number, setNumber] = useState(isEdit ? Number(task.total) : "");
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const ref = useOutsideClick(onCancel);
+  } = useForm({
+    defaultValues: {
+      title: isEdit ? task.title : "",
+      total: isEdit ? task.total : 1,
+    },
+  });
+
+  const ref = useOutsideClick(() => onCancel(null));
 
   function onSubmit(data) {
-    dispatch({
-      type: "task/create",
-      payload: {
-        id: uuid(),
-        title: data.title,
-        total: data.total,
-        completed: 0,
-        isDone: false,
-      },
-    });
-    onCancel();
+    if (isEdit)
+      dispatch({
+        type: "task/update",
+        payload: {
+          id: task.id,
+          title: data.title,
+          total: number,
+        },
+      });
+    else
+      dispatch({
+        type: "task/create",
+        payload: {
+          id: uuid(),
+          title: data.title,
+          total: number,
+          completed: 0,
+          isDone: false,
+        },
+      });
+    onCancel(null);
   }
   function handleChange(e) {
     const val = e.target.value;
@@ -136,7 +153,15 @@ function TaskInput({ onCancel }) {
           justifyContent: "space-between",
         }}
       >
-        <Box></Box>
+        <IconButton
+          sx={{
+            opacity: isEdit ? 1 : 0,
+            visibility: isEdit ? "visible" : "hidden",
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+
         <Stack direction="row" spacing={2}>
           <Box>
             <Button onClick={onCancel}>Cancel</Button>

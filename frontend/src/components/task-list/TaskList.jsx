@@ -17,12 +17,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 function TaskList() {
   const { tasks, selectedTaskId, isLoading, dispatch } = usePomos();
   const [isShowAddTask, setIsShowAddTask] = useState(false);
+  const [editTaskId, setEditTaskId] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   function handleToggleTask(id) {
     dispatch({ type: "task/toggle", payload: id });
   }
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   const handleOnClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -93,15 +94,27 @@ function TaskList() {
         </Menu>
       </Stack>
       <Stack spacing={1.5}>
-        {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            onToggle={handleToggleTask}
-            selectedId={selectedTaskId}
-            onClick={dispatch}
-          />
-        ))}
+        {tasks.map((task) => {
+          if (editTaskId === task.id) {
+            return (
+              <TaskInput
+                key={task.id}
+                task={task}
+                isEdit={true}
+                onCancel={() => setEditTaskId(null)}
+              />
+            );
+          }
+          return (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggle={handleToggleTask}
+              selectedId={selectedTaskId}
+              onClickEdit={() => setEditTaskId(task.id)}
+            />
+          );
+        })}
       </Stack>
       {!isShowAddTask ? (
         <Button
@@ -133,6 +146,7 @@ function TaskList() {
           onCancel={() => {
             setIsShowAddTask(false);
           }}
+          isEdit={false}
         />
       )}
       {tasks.length > 0 && <Summary />}

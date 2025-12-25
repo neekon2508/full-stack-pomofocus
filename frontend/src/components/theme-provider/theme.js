@@ -8,6 +8,9 @@ export const appTheme = createTheme({
     },
     background: {
       default: "rgb(186, 73, 73)",
+    },
+    custom: {
+      pomodoro: "rgb(186, 73, 73)",
       shortBreak: "rgb(76, 145, 149)",
       longBreak: "rgb(69, 124, 163)",
     },

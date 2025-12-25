@@ -50,10 +50,11 @@ const initialState = {
   ],
   selectedTaskId: null,
   sessions: [
-    { type: "Pomodoro", duration: 1500 },
-    { type: "Short Break", duration: 300 },
-    { type: "Long Break", duration: 900 },
+    { id: 0, type: "Pomodoro", duration: 1500 },
+    { id: 1, type: "Short Break", duration: 300 },
+    { id: 2, type: "Long Break", duration: 900 },
   ],
+  sessionActiveId: 0,
   isLoading: false,
 };
 
@@ -104,20 +105,29 @@ function reducer(state, action) {
       };
     case "selectedTaskId/update":
       return { ...state, selectedTaskId: action.payload };
+    case "sessionActiveId/update":
+      return { ...state, sessionActiveId: action.payload };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function PomoProvider({ children }) {
-  const [{ tasks, selectedTaskId, sessions, isLoading }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    { tasks, selectedTaskId, sessions, sessionActiveId, isLoading },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   return (
     <PomoContext.Provider
-      value={{ tasks, selectedTaskId, sessions, isLoading, dispatch }}
+      value={{
+        tasks,
+        selectedTaskId,
+        sessions,
+        sessionActiveId,
+        isLoading,
+        dispatch,
+      }}
     >
       {children}
     </PomoContext.Provider>
