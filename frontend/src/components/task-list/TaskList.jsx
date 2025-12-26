@@ -77,6 +77,7 @@ function TaskList() {
           <MenuItem
             onClick={() => {
               dispatch({ type: "task/deleteCompleted" });
+              handleClose();
             }}
           >
             <DeleteIcon />

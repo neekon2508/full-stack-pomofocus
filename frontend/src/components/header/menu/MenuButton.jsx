@@ -1,11 +1,11 @@
-import NavButton from "../common/nav-button/NavButton";
+import NavButton from "../../common/nav-button/NavButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LoginIcon from "@mui/icons-material/Login";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import { useState } from "react";
-import ShortcutModal from "../shortcut-modal/ShortcutModal";
+import ShortcutModal from "../../shortcut-modal/ShortcutModal";
 import { useNavigate } from "react-router-dom";
 
 function MenuButton() {

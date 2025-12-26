@@ -15,7 +15,6 @@ import { v4 as uuid } from "uuid";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { ErrorMessage } from "@hookform/error-message";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 function TaskInput({ onCancel, isEdit, task }) {
   const { dispatch } = usePomos();
   const [number, setNumber] = useState(isEdit ? Number(task.total) : "");

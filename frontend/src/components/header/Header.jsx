@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import Logo from "../logo/Logo";
-import Report from "../report/report";
-import Setting from "../setting/setting";
+import Logo from "./logo/Logo";
+import Report from "./report/Report";
+import Setting from "./setting/Setting";
 import { useState } from "react";
-import LoginButton from "../login-button/LoginButton";
-import MenuButton from "../menu/MenuButton";
+import LoginButton from "./signin-button/SigninButton";
+import MenuButton from "./menu/MenuButton";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);

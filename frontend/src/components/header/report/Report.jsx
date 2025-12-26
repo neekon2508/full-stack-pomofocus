@@ -1,4 +1,4 @@
-import NavButton from "../common/nav-button/NavButton";
+import NavButton from "../../common/nav-button/NavButton";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 function Report() {
   function handleOnClick() {

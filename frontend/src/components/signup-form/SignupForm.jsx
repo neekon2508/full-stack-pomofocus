@@ -12,7 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import google from "../../assets/images/google-icon/google.svg";
 
-function LoginForm() {
+function SignupForm() {
   const {
     register,
     handleSubmit,
@@ -52,7 +52,7 @@ function LoginForm() {
             },
           }}
         >
-          Login with Google
+          Sign up with Google
         </Button>
 
         <Divider>
@@ -87,31 +87,6 @@ function LoginForm() {
           />
         </Box>
 
-        <Box>
-          <Typography
-            variant="caption"
-            sx={{ fontWeight: "bold", color: "#aaa", mb: 1, display: "block" }}
-          >
-            PASSWORD
-          </Typography>
-          <TextField
-            fullWidth
-            variant="filled"
-            InputProps={{ disableUnderline: true }}
-            sx={{
-              "& .MuiInputBase-root": {
-                borderRadius: "8px",
-                backgroundColor: "#efefef",
-              },
-              "& .MuiInputBase-input": {
-                padding: "10px 12px",
-                fontSize: "14px",
-                height: "1.2em",
-              },
-            }}
-          />
-        </Box>
-
         <Button
           type="submit"
           variant="contained"
@@ -129,22 +104,11 @@ function LoginForm() {
             },
           }}
         >
-          Log in with Email
+          Sign up with Email
         </Button>
-
-        <Link
-          href=""
-          sx={{
-            textAlign: "center",
-            color: "rgb(0,0,0,0.5)",
-            fontWeight: "500",
-          }}
-        >
-          Forgot Password
-        </Link>
       </Stack>
     </Box>
   );
 }
 
-export default LoginForm;
+export default SignupForm;
