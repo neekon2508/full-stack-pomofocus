@@ -1,0 +1,7 @@
+spring:
+    port: 8080
+
+google:
+    client-id: 
+    client-secret:
+
