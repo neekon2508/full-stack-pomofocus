@@ -1,7 +1,6 @@
 spring:
-    port: 8080
+  port: 8080
 
 google:
-    client-id: 
-    client-secret:
-
+  client-id: ${GOOGLE_CLIENT_ID}
+  client-secret: ${GOOGLE_CLIENT_SECRET}
