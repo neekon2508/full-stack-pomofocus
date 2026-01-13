@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    primary:
+      driver-class-name: 
+      jdbc-url:
+      username:
+      password:
+    secondary:
+      driver-class-name: 
+      jdbc-url:
+      username:
+      password:
