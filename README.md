@@ -11,7 +11,7 @@
 - CI (continuous integration) and CD (continuous deployment) based on GitHub Actions.
 
 ## How To Use It
-
+- GitHub: https://viblo.asia/p/tao-pull-request-dung-cach-bWrZnwkrlxw
 ## Backend Development
 
 ## Frontend Development
