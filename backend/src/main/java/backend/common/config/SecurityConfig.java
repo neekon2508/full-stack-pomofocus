@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -16,8 +17,12 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Value("${google.client-id}")
@@ -26,21 +31,26 @@ public class SecurityConfig {
     @Value("${google.client-secret}")
     private String clientSecret;
 
+    private final CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-            .cors(Customizer.withDefaults())
+        return http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .csrf(csrf -> csrf.disable())
             .oauth2Login(o -> o.defaultSuccessUrl("http://localhost:5173/login", true))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(
-                c -> c.anyRequest().authenticated()
-            )
+                c ->
+                    c.requestMatchers("/v3/api-docs/", "/swagger-ui/").permitAll()     
+                    .anyRequest().authenticated()     
+                ) 
             .oauth2ResourceServer(o -> o.jwt(Customizer.withDefaults()))
+            .build()
         ;
         
 
-        return http.build();
     }
 
     @Bean

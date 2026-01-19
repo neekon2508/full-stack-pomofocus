@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    primary:
+      driver-class-name: 
+      jdbc-url:
+      username:
+      password:
+    secondary:
+      driver-class-name: 
+      jdbc-url:
+      username:
+      password:
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+      flush-mode: on_save
+  data:
+    redis:
+      host: 
+      port:
+      password:
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms

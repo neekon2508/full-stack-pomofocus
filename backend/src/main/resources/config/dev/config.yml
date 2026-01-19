@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    primary:
+      driver-class-name: 
+      jdbc-url:
+      username:
+      password:
+    secondary:
+      driver-class-name: 
+      jdbc-url:
+      username:
+      password:
+  session:
+    store-type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.session.autoconfigure.SessionAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+jasypt:
+  encryptor:
+    password: Ami2025!
