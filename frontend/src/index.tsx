@@ -1,6 +1,7 @@
 import App from 'App';
 import 'index.css';
-import ReactDOM from "react-dom/client"
+import ReactDOM from "react-dom/client";
+
 const getPageTitle = () => {
 
     const nodeEnv = process.env.NODE_ENV || 'local';
@@ -17,5 +18,6 @@ const getPageTitle = () => {
     }
     document.title = getPageTitle();
 
-    ReactDOM
+    ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
+
 }
