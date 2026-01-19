@@ -1,4 +1,4 @@
-package backend.config;
+package backend.common.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package backend.config;
+package backend.common.config;
 
 import java.util.concurrent.Executor;
 

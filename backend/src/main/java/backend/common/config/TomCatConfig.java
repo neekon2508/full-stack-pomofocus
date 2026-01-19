@@ -1,4 +1,4 @@
-package backend.config;
+package backend.common.config;
 
 import org.apache.catalina.Wrapper;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;

@@ -1,4 +1,4 @@
-package backend.config;
+package backend.common.config;
 
 import org.ehcache.config.CacheConfiguration;
 import org.springframework.cache.CacheManager;
