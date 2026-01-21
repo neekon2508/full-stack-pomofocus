@@ -6,13 +6,13 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@EnableCaching
-public class CacheConfig {
+// @Configuration
+// @EnableCaching
+// public class CacheConfig {
 
-    @Bean
-    public CacheManager EhcacheManager() {
+//     @Bean
+//     public CacheManager EhcacheManager() {
 
-        // CacheConfiguration<String, 
-    }
-}
+//         // CacheConfiguration<String, 
+//     }
+// }
