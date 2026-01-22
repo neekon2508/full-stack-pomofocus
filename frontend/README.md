@@ -34,7 +34,7 @@
 - Instructions on how to run tests, including any specific commands or frameworkd used.
 ## Built with 
 
-## Libraries 
+### Libraries 
 
 - Link: package.json
 - Focus on keywords: sciprt, browserslist 
@@ -42,7 +42,19 @@
 ### Configuration file for Vite
 
 - Link: vite.config.ts
-- 
+
+### React Query Hook
+
+- Library: Tanstack Query (https://tanstack.com/query/latest)
+- Link: src/hooks/queries
+
+### Make HTTP request
+- Library: Axios (https://axios-http.com/docs/intro)
+- Link: src/apis, src/utils/api-utils
+
+### State Management
+- Library: Zustand (https://zustand.docs.pmnd.rs/getting-started/introduction)
+- Link: src/stores
 
 ### CI/CD Tools (Jenkins)
 - Link: https://www.youtube.com/playlist?list=PLy7NrYWoggjw_LIiDK1LXdNN82uYuuuiC
