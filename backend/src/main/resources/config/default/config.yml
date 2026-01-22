@@ -1,4 +1,17 @@
 spring:
+  flyway:
+    url:
+    schemas:
+    table: 
+    user:
+    password:
+    locations:
+      - classpath:db/oraclesql/ddl
+      - classpath:db/oraclesql/data
+    baseline-one-migrate: true
+    baselineVersion: 0.0
+    out-of-order: true
+    
   datasource:
     primary:
       driver-class-name: 

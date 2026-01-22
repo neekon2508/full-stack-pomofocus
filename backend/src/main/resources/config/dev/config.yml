@@ -21,3 +21,9 @@ spring:
 jasypt:
   encryptor:
     password: Ami2025!
+
+interceptor:
+  authentication:
+    exclude-paths: >-
+      /api/auth/**,
+      /error

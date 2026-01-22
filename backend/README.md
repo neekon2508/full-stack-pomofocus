@@ -35,6 +35,10 @@
 - Instructions on how to run tests, including any specific commands or frameworkd used.
 ## Built with 
 
+### Spring MVC Configuration
+
+- WebMvcConfigurer: customize Java-based configuration for Spring MVC enabled via @EnabledWebMvc.
+
 ### CI/CD Tools (Jenkins)
 - Link: https://www.youtube.com/playlist?list=PLy7NrYWoggjw_LIiDK1LXdNN82uYuuuiC
 ### AWS Deployments

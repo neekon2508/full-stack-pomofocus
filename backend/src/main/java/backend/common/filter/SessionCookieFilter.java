@@ -34,8 +34,12 @@ public class SessionCookieFilter implements Filter {
             !origin.startsWith("http://localhost") &&
             !origin.matches("http://127\\.0\\.0\\.1.*");
 
+        //request go to another filter then Controller
         chain.doFilter(request, response);
 
+        //Response go back to this filter 
+        //true: if having session, get it, otherwise creating new session
+        //false: if having session, get it, otherwise return null
         HttpSession session = httpRequest.getSession(false);
         if (session != null && isCorsRequest) {
             try {
