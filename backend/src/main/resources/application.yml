@@ -6,12 +6,11 @@ spring:
       prd: common, prd
     active: default
 ---
-
 spring:
   config:
     activate:
       on-profile: common
-  
+
   servlet:
     multipart:
       max-file-size: 15MB
@@ -37,7 +36,7 @@ server:
   port: 7070
   servlet:
     context-path: /
-    encoding: 
+    encoding:
       charset: UTF-8
       enabled: true
       force: true
@@ -48,6 +47,14 @@ server:
         path: /
         http-only: true
         secure: false
+
+mybatis:
+  mapper-locations:
+    primary: classpath*:/mysql/primary/**/*.xml
+    secondary: classpath*:/mysql/secondary/**/*/xml
+  type-aliases-package: backend.**.model
+  configuration:
+    return-instance-for-empty-row: false
 
 google:
   client-id: ${GOOGLE_CLIENT_ID}
@@ -60,7 +67,6 @@ spring:
       on-profile: default
     import:
       - classpath:config/default/config.yml
-
 ---
 spring:
   config:
@@ -68,7 +74,6 @@ spring:
       on-profile: dev
     import:
       - classpath:config/dev/config.yml
-
 ---
 spring:
   config:

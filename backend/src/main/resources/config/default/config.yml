@@ -2,24 +2,24 @@ spring:
   flyway:
     url:
     schemas:
-    table: 
+    table:
     user:
     password:
     locations:
-      - classpath:db/oraclesql/ddl
-      - classpath:db/oraclesql/data
+      - classpath:db/mysql/ddl
+      - classpath:db/mysql/data
     baseline-one-migrate: true
     baselineVersion: 0.0
     out-of-order: true
-    
+
   datasource:
     primary:
-      driver-class-name: 
-      jdbc-url:
-      username:
-      password:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/my_db
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
     secondary:
-      driver-class-name: 
+      driver-class-name:
       jdbc-url:
       username:
       password:
