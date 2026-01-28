@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     status TINYINT DEFAULT 1 COMMENT '1: Active, 0: Locked',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -20,21 +20,11 @@ CREATE TABLE IF NOT EXISTS user_settings (
 );
 
 -- ==========================================================
--- 2. NHÓM BUSINESS: PROJECTS, TASKS & SESSIONS
+-- 2. NHÓM BUSINESS: TASKS & SESSIONS
 -- ==========================================================
-
-CREATE TABLE IF NOT EXISTS projects (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    color_code VARCHAR(7) DEFAULT '#BA4949',
-    is_archived BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS tasks (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    project_id BIGINT NULL,
     user_id BIGINT NOT NULL,
     title VARCHAR(255) NOT NULL,
     note TEXT,
@@ -43,7 +33,6 @@ CREATE TABLE IF NOT EXISTS tasks (
     is_completed BOOLEAN DEFAULT FALSE,
     due_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_user_task_status (user_id, is_completed) 
 );
@@ -98,21 +87,21 @@ CREATE TABLE IF NOT EXISTS sys_role_api (
 -- 4. NHÓM UI: DYNAMIC MENU
 -- ==========================================================
 
-CREATE TABLE IF NOT EXISTS sys_menus (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    parent_id BIGINT NULL,
-    title VARCHAR(50) NOT NULL,
-    path VARCHAR(100), -- Path của Frontend route
-    icon VARCHAR(50),
-    sort_order INT DEFAULT 0,
-    is_hidden BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (parent_id) REFERENCES sys_menus(id) ON DELETE SET NULL
-);
+-- CREATE TABLE IF NOT EXISTS sys_menus (
+--     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--     parent_id BIGINT NULL,
+--     title VARCHAR(50) NOT NULL,
+--     path VARCHAR(100),
+--     icon VARCHAR(50),
+--     sort_order INT DEFAULT 0,
+--     is_hidden BOOLEAN DEFAULT FALSE,
+--     FOREIGN KEY (parent_id) REFERENCES sys_menus(id) ON DELETE SET NULL
+-- );
 
-CREATE TABLE IF NOT EXISTS sys_menu_role (
-    menu_id BIGINT NOT NULL,
-    role_id BIGINT NOT NULL,
-    PRIMARY KEY (menu_id, role_id),
-    FOREIGN KEY (menu_id) REFERENCES sys_menus(id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES sys_roles(id) ON DELETE CASCADE
-);
+-- CREATE TABLE IF NOT EXISTS sys_menu_role (
+--     menu_id BIGINT NOT NULL,
+--     role_id BIGINT NOT NULL,
+--     PRIMARY KEY (menu_id, role_id),
+--     FOREIGN KEY (menu_id) REFERENCES sys_menus(id) ON DELETE CASCADE,
+--     FOREIGN KEY (role_id) REFERENCES sys_roles(id) ON DELETE CASCADE
+-- );

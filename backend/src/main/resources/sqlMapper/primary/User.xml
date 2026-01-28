@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.user.repository.UserRepository">
+
+    <!-- selectUsers --> 
+
+    <select id="selectUsers" resultType="backend.user.model.UserResponseVO">
+        SELECT id
+             , username
+             , email
+             , password
+             , status
+        FROM User U
+        WHERE 1=1
+        <if test='user.username != null and user.username != ""'>
+            AND UPPER(U.username) LIKE CONCAT('%', UPPER(#{user.username, typeHandler=backend.common.handler.LikeEscapeTypeHandler}), '%')
+        </if>
+        <if test='user.email != null and user.email != ""'>
+            AND UPPER(U.email) LIKE CONCAT('%', UPPER(#{user.email, typeHandler=backend.common.handler.LikeEscapeTypeHandler}), '%')
+        </if>
+        <if test='user.status != null'>
+            AND status = #{user.status}
+        </if>
+
+    </select>
+</mapper>

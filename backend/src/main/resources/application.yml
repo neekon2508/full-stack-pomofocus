@@ -40,14 +40,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-    session:
-      cookie:
-        name: JSESSIONID
-        domain: localhost
-        path: /
-        http-only: true
-        secure: false
-
+      
 mybatis:
   mapper-locations:
     primary: classpath*:/mysql/primary/**/*.xml

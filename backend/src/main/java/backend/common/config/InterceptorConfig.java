@@ -8,17 +8,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import backend.common.interceptor.AuthorizationInterceptor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class InterceptorConfig implements WebMvcConfigurer{
 
-    @Value("${interceptor.authentication.exclude-paths}")
-    private List<String> authenticationExcludePaths;
+    private final AuthorizationInterceptor authorizationInterceptor;
+
+    @Value("${interceptor.authorization.exclude-paths}")
+    private List<String> authorizationExcludePaths;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> urlPatterns = Arrays.asList("/**");
+
+        registry.addInterceptor(authorizationInterceptor)
+                .addPathPatterns(urlPatterns)
+                .excludePathPatterns(authorizationExcludePaths);
     }
 }

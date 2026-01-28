@@ -1,10 +1,9 @@
 spring:
   flyway:
-    url:
-    schemas:
-    table:
-    user:
-    password:
+    url: jdbc:mysql://localhost:3306/my_db
+    schemas: app-db
+    user: root
+    password: ${SPRING_DATASOURCE_PASSWORD}
     locations:
       - classpath:db/mysql/ddl
       - classpath:db/mysql/data
@@ -23,8 +22,6 @@ spring:
       jdbc-url:
       username:
       password:
-  session:
-    store-type: none
   autoconfigure:
     exclude:
       - org.springframework.session.autoconfigure.SessionAutoConfiguration
@@ -33,3 +30,14 @@ spring:
 jasypt:
   encryptor:
     password: Ami2025!
+
+interceptor:
+  authorization:
+    exclude-paths: >-
+      /api/test/**,
+      /api/auth/**,
+      /api/swagger-ui.html,
+      /api/swagger-ui/**,
+      /error,
+      /api/v1/sso/**,
+      /api/v3/api-docs/**,
