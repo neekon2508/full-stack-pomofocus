@@ -6,10 +6,10 @@
     <select id="selectSysApis" resultType="backend.api.model.SysApiResponseVO">
         SELECT 
                A.id 
-             , MAX(A.api_name)
-             , MAX(A.api_url)
-             , MAX(A.api_method)
-             , MAX(A.api_code)
+             , MAX(A.api_name) AS apiName
+             , MAX(A.api_url) AS apiUrl
+             , MAX(A.api_method) AS apiMethod
+             , MAX(A.api_code) AS apiCode
              , GROUP_CONCAT(DISTINCT R.role_code ORDER BY R.role_code SEPARATOR ', ') AS roleCodes      
         FROM sys_api A
         LEFT JOIN sys_role_api RA ON A.id= RA.api_id

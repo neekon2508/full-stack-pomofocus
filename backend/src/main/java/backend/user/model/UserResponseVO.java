@@ -1,5 +1,9 @@
 package backend.user.model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,11 +17,8 @@ import lombok.Setter;
 @Setter
 public class UserResponseVO {
 
-    @Schema(description = "Id", example = "1")
-    private Long id;
-
-    @Schema(description = "Username", example = "Neekon")
-    private String username;
+    @Schema(description = "Id", example = "neekon")
+    private String id;
 
     @Schema(description = "email", example = "neekon@gmail.com")
     private String email;
@@ -28,4 +29,13 @@ public class UserResponseVO {
     @Schema(description = "Status", example = "1")
     private Integer status;
 
+    @Schema(description = "User Roles")
+    private List<String> userRoles;
+
+    private String roleCodes;
+
+    public void setRoleCodes(String roleCodes) {
+        this.roleCodes = roleCodes;
+        this.userRoles = roleCodes != null ? Arrays.asList(roleCodes.split(",")) : Collections.emptyList();
+    }
 }

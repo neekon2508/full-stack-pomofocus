@@ -6,23 +6,17 @@
 
     <!-- selectUsers --> 
 
-    <select id="selectUsers" resultType="backend.user.model.UserResponseVO">
+    <select id="findUserById" resultType="backend.user.model.UserResponseVO">
         SELECT id
-             , username
-             , email
-             , password
-             , status
-        FROM User U
-        WHERE 1=1
-        <if test='user.username != null and user.username != ""'>
-            AND UPPER(U.username) LIKE CONCAT('%', UPPER(#{user.username, typeHandler=backend.common.handler.LikeEscapeTypeHandler}), '%')
-        </if>
-        <if test='user.email != null and user.email != ""'>
-            AND UPPER(U.email) LIKE CONCAT('%', UPPER(#{user.email, typeHandler=backend.common.handler.LikeEscapeTypeHandler}), '%')
-        </if>
-        <if test='user.status != null'>
-            AND status = #{user.status}
-        </if>
-
+             , MAX(email) AS email
+             , MAX(password) AS password
+             , MAX(status) AS status
+             , GROUP_CONCAT(DISTINCT R.role_code ORDER BY R.role_code SEPARATOR ', ') AS roleCodes      
+        FROM users U
+                
+        LEFT JOIN user_role UR ON U.id= UR.user_id
+        LEFT JOIN sys_roles R ON UR.role_id = R.id
+        WHERE U.id = #{id}
+        GROUP BY U.id
     </select>
 </mapper>

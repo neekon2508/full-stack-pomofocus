@@ -1,5 +1,5 @@
-INSERT INTO sys_roles (role_code, role_name) 
+INSERT INTO sys_roles (id, role_code, role_name) 
 VALUES
-('ADMIN', 'System Administrator'),
-('USER', 'Standard User'),
-('PREMIUM', 'Premium Subscriber');
+(1, 'ADMIN', 'System Administrator'),
+(2, 'USER', 'Standard User'),
+(3, 'PREMIUM', 'Premium Subscriber');

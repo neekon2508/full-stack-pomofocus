@@ -14,10 +14,10 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class UserRequestVO extends CrudVO{
+public class UserRequestVO extends CrudVO {
 
-    @Schema(description = "Username", example = "Neekon" )
-    private String username;
+    @Schema(description = "id", example = "Neekon")
+    private String id;
 
     @Schema(description = "Email", example = "neekon@gmail.com")
     private String email;
