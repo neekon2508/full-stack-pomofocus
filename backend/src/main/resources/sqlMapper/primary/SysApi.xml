@@ -40,34 +40,41 @@
             )
     </insert>
 
-    <!-- checkAccessibleApiUrlByRoleCodes --> 
-
-    <select id="checkAccessibleApiUrlByRoleCodes">
+    
+    <select id="checkAccessibleApiUrlByRoleCodes" resultType="boolean">
+        SELECT
+            CASE
+                WHEN COUNT(*) > 0 THEN 1
+                ELSE 0
+            END
+        FROM sys_apis A
+        INNER JOIN sys_role_api RA ON A.id = RA.api_id
+        INNER JOIN sys_roles R ON RA.role_id = R.id
+        WHERE A.api_url = #{apiUrl}
+          AND A.api_method = #{httpMethodCode}   
+          AND R.role_code IN 
+            <foreach item="role" collection="roleCodes" open="(" separator="," close=")">
+                #{role}
+            </foreach>
     </select>
 
-    <!-- existSysApi --> 
 
-    <select id="existSysApi">
-    </select>
-    <!-- updateSysApi --> 
+    <!-- <select id="existSysApi">
+    </select> -->
 
+    <!--
     <update id="updateSysApi">
     </update>    
-    <!-- deleteSysApi --> 
 
     <delete id="deleteSysApi">
     </delete>    
-    <!-- selectApiRoleCodes --> 
 
     <select id="selectApiRoleCodes">
     </select>    
-    <!-- deleteAllApiRoles --> 
-
     <delete id="deleteAllApiRoles">
     </delete>
-    <!-- insertApiRoles --> 
 
     <update id="insertApiRoles">
     
-    </update>        
+    </update>         -->
 </mapper>

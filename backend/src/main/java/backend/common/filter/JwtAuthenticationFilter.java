@@ -25,14 +25,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // String requestURI = request.getRequestURI();
-        // if (requestURI.startsWith("/swagger-ui") ||
-        // requestURI.startsWith("/api/swagger-ui") ||
-        // requestURI.startsWith("/v3/api-docs") ||
-        // requestURI.startsWith("/api/v3/api-docs")) {
-        // filterChain.doFilter(request, response);
-        // return;
-        // }
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/swagger-ui") ||
+        requestURI.startsWith("/api/swagger-ui") ||
+        requestURI.startsWith("/v3/api-docs") ||
+        requestURI.startsWith("/api/v3/api-docs") || 
+        requestURI.startsWith("/api/auth")) {
+        filterChain.doFilter(request, response);
+        return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 

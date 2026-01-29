@@ -6,17 +6,14 @@
 
     <!-- selectUsers --> 
 
-    <select id="findUserById" resultType="backend.user.model.UserResponseVO">
+    <select id="selectUsers" resultType="backend.user.model.UserResponseVO">
         SELECT id
-             , MAX(email) AS email
-             , MAX(password) AS password
-             , MAX(status) AS status
-             , GROUP_CONCAT(DISTINCT R.role_code ORDER BY R.role_code SEPARATOR ', ') AS roleCodes      
-        FROM users U
-                
-        LEFT JOIN user_role UR ON U.id= UR.user_id
-        LEFT JOIN sys_roles R ON UR.role_id = R.id
-        WHERE U.id = #{id}
-        GROUP BY U.id
+             , email
+             , password
+             , status
+        FROM User U
+        WHERE U.id=#{id}
+
+
     </select>
 </mapper>

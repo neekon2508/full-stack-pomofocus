@@ -1,10 +1,6 @@
 package backend.auth.service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;

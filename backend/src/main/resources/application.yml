@@ -20,6 +20,11 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
+  data:
+    redis:
+      port:
+      host:
+      password: 
 springdoc:
   packages-to-scan: backend
   default-consumes-media-type: application/json;charset=UTF-8
@@ -50,8 +55,8 @@ mybatis:
     return-instance-for-empty-row: false
 
 google:
-  client-id: ${GOOGLE_CLIENT_ID}
-  client-secret: ${GOOGLE_CLIENT_SECRET}
+  client-id: ${GOOGLE_CLIENT_ID:-unsed}
+  client-secret: ${GOOGLE_CLIENT_SECRET:-unused}
 
 ---
 spring:

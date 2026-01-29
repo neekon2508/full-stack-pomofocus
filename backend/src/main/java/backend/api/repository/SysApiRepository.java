@@ -18,17 +18,17 @@ public interface SysApiRepository {
 
     int insertSysApi(@Param("sysApi") SysApiRequestVO sysApi);
 
-    int updateSysApi(@Param("sysApi") SysApiRequestVO sysApi);
+    // int updateSysApi(@Param("sysApi") SysApiRequestVO sysApi);
 
-    int deleteSysApi(String apiId);
+    // int deleteSysApi(String apiId);
 
-    List<String> selectApiRoleCodes(String apiId);
+    // List<String> selectApiRoleCodes(String apiId);
 
-    int deleteAllApiRoles(String apiId);
+    // int deleteAllApiRoles(String apiId);
 
-    int insertApiRoles(@Param("apiId") String apiId, @Param("roleCodes") List<String> roleCodes);
+    // int insertApiRoles(@Param("apiId") String apiId, @Param("roleCodes") List<String> roleCodes);
 
-    boolean existSysApi(@Param("sysApi") String sysApi, @Param("httpMethodCode") String httpMethodCode);
+    // boolean existSysApi(@Param("sysApi") String sysApi, @Param("httpMethodCode") String httpMethodCode);
 
     boolean checkAccessibleApiUrlByRoleCodes(@Param("apiUrl") String apiUrl, @Param("httpMethodCode") String httpMethodCode, @Param("roleCodes") List<String> roleCodes);
 }
