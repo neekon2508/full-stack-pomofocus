@@ -23,6 +23,7 @@
 ### Environment Variables
 
 ### Running the Project
+- Develop: gradle classes -t, gradle bootRun 
 
 - Commands to start the application.
 

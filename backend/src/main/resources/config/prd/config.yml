@@ -10,11 +10,6 @@ spring:
       jdbc-url:
       username:
       password:
-  session:
-    store-type: redis
-    redis:
-      namespace: spring:session
-      flush-mode: on_save
   data:
     redis:
       host: 

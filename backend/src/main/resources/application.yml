@@ -22,9 +22,9 @@ spring:
 
   data:
     redis:
-      port:
-      host:
-      password: 
+      port: 6379
+      host: localhost
+      password: secret
 springdoc:
   packages-to-scan: backend
   default-consumes-media-type: application/json;charset=UTF-8
@@ -48,8 +48,8 @@ server:
       
 mybatis:
   mapper-locations:
-    primary: classpath*:/mysql/primary/**/*.xml
-    secondary: classpath*:/mysql/secondary/**/*/xml
+    primary: classpath*:/sqlMapper/primary/**/*.xml
+    secondary: classpath*:/sqlMapper/secondary/**/*/xml
   type-aliases-package: backend.**.model
   configuration:
     return-instance-for-empty-row: false

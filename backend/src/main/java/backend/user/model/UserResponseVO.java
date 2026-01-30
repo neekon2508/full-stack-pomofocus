@@ -17,9 +17,12 @@ import lombok.Setter;
 @Setter
 public class UserResponseVO {
 
-    @Schema(description = "Id", example = "neekon")
-    private String id;
+    @Schema(description = "Id", example = "1")
+    private Integer id;
 
+    @Schema(description = "Username", example = "username")
+    private String username;
+    
     @Schema(description = "email", example = "neekon@gmail.com")
     private String email;
 

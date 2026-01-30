@@ -1,9 +1,9 @@
 spring:
   flyway:
     url: jdbc:mysql://localhost:3306/my_db
-    schemas: app-db
+    schemas: my_db
     user: root
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    password: secret
     locations:
       - classpath:db/mysql/ddl
       - classpath:db/mysql/data
@@ -14,9 +14,9 @@ spring:
   datasource:
     primary:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/my_db
-      username: ${SPRING_DATASOURCE_USERNAME}
-      password: ${SPRING_DATASOURCE_PASSWORD}
+      jdbc-url: jdbc:mysql://localhost:3306/my_db?allowPublicKeyRetrieval=true&useSSL=false
+      username: root
+      password: secret
     secondary:
       driver-class-name:
       jdbc-url:

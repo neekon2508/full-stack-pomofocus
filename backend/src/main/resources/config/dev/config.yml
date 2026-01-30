@@ -10,8 +10,6 @@ spring:
       jdbc-url:
       username:
       password:
-  session:
-    store-type: none
   autoconfigure:
     exclude:
       - org.springframework.session.autoconfigure.SessionAutoConfiguration

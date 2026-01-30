@@ -15,15 +15,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserResponseVO user = userRepository.findUserById(username);
+        UserResponseVO user = userRepository.findUserByName(username);
 
         if (user == null)
             throw new UsernameNotFoundException("User not found: " + username);
-        if (user.getStatus() == 1)
+        if (user.getStatus() != 1)
             throw new DisabledException("Account is locked: " + username);
         return User.builder()
                 .username(username)

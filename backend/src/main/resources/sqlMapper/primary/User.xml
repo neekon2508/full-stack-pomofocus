@@ -6,14 +6,22 @@
 
     <!-- selectUsers --> 
 
-    <select id="selectUsers" resultType="backend.user.model.UserResponseVO">
-        SELECT id
-             , email
-             , password
-             , status
-        FROM User U
-        WHERE U.id=#{id}
-
-
+    <select id="findUserByName" resultType="backend.user.model.UserResponseVO">
+        SELECT U.id
+             , U.username
+             , U.email
+             , U.password
+             , U.status
+             , GROUP_CONCAT(R.role_code) AS roleCodes
+        FROM Users U
+        LEFT JOIN user_role UR ON U.id = UR.user_id
+        LEFT JOIN sys_roles R ON UR.role_id = R.id
+        WHERE U.username=#{username}
+        GROUP BY 
+            U.id
+          , U.username
+          , U.email
+          , U.password
+          , U.status
     </select>
 </mapper>

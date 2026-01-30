@@ -1,3 +1,3 @@
 INSERT INTO user_role (user_id, role_id)
 VALUES
-("neekon", 1);
+(1, 1);

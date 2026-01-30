@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -26,12 +28,12 @@ import lombok.RequiredArgsConstructor;
     annotationClass = Mapper.class
 )
 @RequiredArgsConstructor
-@ConditionalOnExpression("!T(org.springframework.util.StringUtils).isEmpty('${spring.datasource.primary.jdbc-url:}')")
+// @ConditionalOnExpression("!T(org.springframework.util.StringUtils).isEmpty('${spring.datasource.primary.jdbc-url:}')")
 public class DataSourceConfig {
 
     private final ApplicationContext applicationContext;
 
-    @Value("${mybatis.mapper-locations.primary:classpath:sql/primary/**/*.xml}")
+    @Value("${mybatis.mapper-locations.primary}")
     private String mapperLocations;
 
     @Value("${mybatis.type-aliases-package}")
@@ -41,7 +43,7 @@ public class DataSourceConfig {
     @Bean(name = "primaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.primary")
     public DataSource primaryDataSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
     @Bean(name = "primarySessionFactory")

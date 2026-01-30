@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintViolationException;
 public class RestControllerExceptionAdvice {
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<CommonResponseVO> customBusinessExceptionHandler(BusinessException e) {
+    public ResponseEntity<CommonResponseVO<?>> customBusinessExceptionHandler(BusinessException e) {
         log.error("[customBusinessExceptionHandler]" + e.getMessage(), e);
 
         return new ResponseEntity<>(CommonResponseVO.builder()
@@ -39,7 +39,7 @@ public class RestControllerExceptionAdvice {
         MethodArgumentTypeMismatchException.class,
         HttpMessageNotReadableException.class
     })
-    public ResponseEntity<CommonResponseVO> constraintViolationExceptionHandler(Exception e) {
+    public ResponseEntity<CommonResponseVO<?>> constraintViolationExceptionHandler(Exception e) {
         log.warn("[constraintViolationExceptionHandler]" + e.getMessage());
 
         return new ResponseEntity<>(CommonResponseVO.builder()
@@ -49,7 +49,11 @@ public class RestControllerExceptionAdvice {
                     .build(), HttpStatus.OK);
     }
 
-    public ResponseEntity<CommonResponseVO> missingServletRequestParameterExceptionHandler(Exception e) {
+    @ExceptionHandler({
+        MissingServletRequestParameterException.class,
+        BindException.class
+    })
+    public ResponseEntity<CommonResponseVO<?>> missingServletRequestParameterExceptionHandler(Exception e) {
         log.error("[missingServletRequestParameterExceptionHandler]" + e.getMessage(), e);
 
         return new ResponseEntity<>(CommonResponseVO.builder()
@@ -60,7 +64,7 @@ public class RestControllerExceptionAdvice {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<CommonResponseVO> parameterValidationExceptionHandler(MethodArgumentNotValidException e) {
+    public ResponseEntity<CommonResponseVO<?>> parameterValidationExceptionHandler(MethodArgumentNotValidException e) {
         log.debug("[parameterValidationExceptionHandler] " + e.getMessage(), e);
 
         StringBuilder mandatoryParameterStringBuilder = new StringBuilder();
@@ -80,7 +84,7 @@ public class RestControllerExceptionAdvice {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<CommonResponseVO> customExceptionHandler(Exception e) {
+    public ResponseEntity<CommonResponseVO<?>> customExceptionHandler(Exception e) {
         log.error("[customExceptionHandler]" + e.getMessage(), e);
         return new ResponseEntity<>(CommonResponseVO.builder()
                     .successOrNot(CommonConstants.NO_FLAG)
