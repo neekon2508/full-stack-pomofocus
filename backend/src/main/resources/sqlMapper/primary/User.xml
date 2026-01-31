@@ -13,7 +13,7 @@
              , U.password
              , U.status
              , GROUP_CONCAT(R.role_code) AS roleCodes
-        FROM Users U
+        FROM users U
         LEFT JOIN user_role UR ON U.id = UR.user_id
         LEFT JOIN sys_roles R ON UR.role_id = R.id
         WHERE U.username=#{username}

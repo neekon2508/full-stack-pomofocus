@@ -45,7 +45,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-      
+
 mybatis:
   mapper-locations:
     primary: classpath*:/sqlMapper/primary/**/*.xml
@@ -53,6 +53,16 @@ mybatis:
   type-aliases-package: backend.**.model
   configuration:
     return-instance-for-empty-row: false
+
+jwt:
+  access-token-secret-key: access-secret-key-access-secret-key
+  refresh-token-secret-key: refresh-secret-key-refresh-secret-key
+  access-token-expiration-time: 1000
+  refresh-token-expiration-time: 604800
+
+request:
+  cookie:
+    refresh-cookie-name: POMOFOCUS_REFRESH-TOKEN
 
 google:
   client-id: ${GOOGLE_CLIENT_ID:-unsed}

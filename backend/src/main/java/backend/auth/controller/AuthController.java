@@ -1,8 +1,6 @@
 package backend.auth.controller;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +14,9 @@ import backend.common.constant.CommonConstants;
 import backend.common.constant.StatusCodeConstants;
 import backend.common.model.CommonResponseVO;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -25,28 +25,37 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "0. JWT Authentication", description = "JWT API")
 public class AuthController {
 
-    private final AuthService authService;
+        private final AuthService authService;
 
-    @PostMapping("/auth/login")
-    public ResponseEntity<CommonResponseVO<LoginResponseVO>> login(@RequestBody LoginRequestVO req,
-            HttpServletResponse res) {
-        LoginResponseVO response = authService.login(req);
+        @PostMapping("/auth/login")
+        public ResponseEntity<CommonResponseVO<LoginResponseVO>> login(@Valid @RequestBody LoginRequestVO req,
+                        HttpServletResponse response) {
 
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", response.getRefreshToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(7 * 24 * 60 * 60)
-                .sameSite("Lax")
-                .build();
+                return new ResponseEntity<>(CommonResponseVO.<LoginResponseVO>builder()
+                                .successOrNot(CommonConstants.YES_FLAG)
+                                .statusCode(StatusCodeConstants.SUCCESS)
+                                .data(authService.login(req, response))
+                                .build(), HttpStatus.OK);
+        }
 
-        res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        @PostMapping("/auth/refresh")
+        public ResponseEntity<CommonResponseVO<LoginResponseVO>> refresh(HttpServletRequest request,
+                        HttpServletResponse response) {
+                return ResponseEntity.ok(
+                                CommonResponseVO.<LoginResponseVO>builder()
+                                                .successOrNot(CommonConstants.YES_FLAG)
+                                                .statusCode(StatusCodeConstants.SUCCESS)
+                                                .data(authService.refresh(request, response))
+                                                .build());
+        }
 
-        return new ResponseEntity<>(CommonResponseVO.<LoginResponseVO>builder()
-                .successOrNot(CommonConstants.YES_FLAG)
-                .statusCode(StatusCodeConstants.SUCCESS)
-                .data(response)
-                .build(), HttpStatus.OK);
-    }
-
+        @PostMapping("/auth/logout")
+        public ResponseEntity<CommonResponseVO<String>> logout(HttpServletRequest request) {
+                return ResponseEntity.ok(
+                                CommonResponseVO.<String>builder()
+                                                .successOrNot(CommonConstants.YES_FLAG)
+                                                .statusCode(StatusCodeConstants.SUCCESS)
+                                                .data(authService.logout(request))
+                                                .build());
+        }
 }

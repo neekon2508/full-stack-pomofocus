@@ -3,9 +3,9 @@ package backend.auth.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import backend.auth.model.RefreshTokenWhiteList;
+import backend.auth.model.AccessTokenBlackList;
 
 @Repository
-public interface RefreshTokenRepository extends CrudRepository<RefreshTokenWhiteList, String> {
+public interface AccessTokenRepository extends CrudRepository<AccessTokenBlackList, String> {
 
 }

@@ -41,14 +41,10 @@ public class SecurityConfig {
     @Value("${google.client-secret}")
     private String clientSecret;
 
-    private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final CorsConfigurationSource corsConfigurationSource;
 
-    @Bean
-    public Filter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil, userDetailsService);
-    }
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -59,15 +55,12 @@ public class SecurityConfig {
                 .oauth2Login(o -> o.defaultSuccessUrl("http://localhost:5173/login", true))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        c -> c.requestMatchers("/v3/api-docs/"
-                                                          , "/swagger-ui/"
-                                                          , "/api/swagger-ui"
-                                                          , "/api/auth/login"
-                                                          , "/api/v3/api-docs")
+                        c -> c.requestMatchers("/v3/api-docs/", "/swagger-ui/", "/api/swagger-ui", "/api/auth/login",
+                                "/api/v3/api-docs")
                                 .permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(o -> o.jwt(Customizer.withDefaults()))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -77,7 +70,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
+            throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder)
