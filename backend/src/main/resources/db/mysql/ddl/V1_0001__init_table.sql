@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS user_role (
     FOREIGN KEY (role_id) REFERENCES sys_roles(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS sys_api (
+CREATE TABLE IF NOT EXISTS sys_apis (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     api_name VARCHAR(100),
     api_url VARCHAR(255) NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS sys_role_api (
     api_id BIGINT NOT NULL,
     PRIMARY KEY (role_id, api_id),
     FOREIGN KEY (role_id) REFERENCES sys_roles(id) ON DELETE CASCADE,
-    FOREIGN KEY (api_id) REFERENCES sys_api(id) ON DELETE CASCADE
+    FOREIGN KEY (api_id) REFERENCES sys_apis(id) ON DELETE CASCADE
 );
 
 -- ==========================================================

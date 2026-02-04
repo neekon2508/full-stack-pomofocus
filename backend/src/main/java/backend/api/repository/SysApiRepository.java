@@ -26,7 +26,7 @@ public interface SysApiRepository {
 
     // int insertApiRoles(@Param("apiId") String apiId, @Param("roleCodes") List<String> roleCodes);
 
-    // boolean existSysApi(@Param("sysApi") String sysApi, @Param("httpMethodCode") String httpMethodCode);
+    boolean existSysApi(@Param("sysApi") String sysApi, @Param("httpMethodCode") String httpMethodCode);
 
     boolean checkAccessibleApiUrlByRoleCodes(@Param("apiUrl") String apiUrl, @Param("httpMethodCode") String httpMethodCode, @Param("roleCodes") List<String> roleCodes);
 }

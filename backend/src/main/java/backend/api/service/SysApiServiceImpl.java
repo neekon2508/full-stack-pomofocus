@@ -56,11 +56,11 @@ public class SysApiServiceImpl implements SysApiService{
 
     @Override
     public boolean checkAccessibleApiUrlByRoleCodes(String apiUrl, String httpMethodCode, List<String> roleCodes) {
-        // boolean exists = sysApiRepository.existSysApi(apiUrl, httpMethodCode);
+        boolean exists = sysApiRepository.existSysApi(apiUrl, httpMethodCode);
 
         //If api is not registered, it's considered accessible
-        // if (!exists)
-        //     return true;
+        if (!exists)
+            return true;
 
         return sysApiRepository.checkAccessibleApiUrlByRoleCodes(apiUrl, httpMethodCode, roleCodes);
     }

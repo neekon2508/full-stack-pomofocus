@@ -11,7 +11,7 @@
              , MAX(A.api_method) AS apiMethod
              , MAX(A.api_code) AS apiCode
              , GROUP_CONCAT(DISTINCT R.role_code ORDER BY R.role_code SEPARATOR ', ') AS roleCodes      
-        FROM sys_api A
+        FROM sys_apis A
         LEFT JOIN sys_role_api RA ON A.id= RA.api_id
         LEFT JOIN sys_roles R ON RA.role_id = R.id
         
@@ -26,7 +26,7 @@
     </select>
 
     <insert id="insertSysApi">
-        INSERT INTO sys_api
+        INSERT INTO sys_apis
             ( api_name
             , api_url
             , api_method
@@ -40,7 +40,15 @@
             )
     </insert>
 
-    
+    <select id="existSysApi" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM sys_apis A
+            WHERE A.api_url = #{sysApi}
+              AND A.api_method = #{httpMethodCode} 
+        )
+    </select>
+
     <select id="checkAccessibleApiUrlByRoleCodes" resultType="boolean">
         SELECT
             CASE
@@ -57,24 +65,4 @@
                 #{role}
             </foreach>
     </select>
-
-
-    <!-- <select id="existSysApi">
-    </select> -->
-
-    <!--
-    <update id="updateSysApi">
-    </update>    
-
-    <delete id="deleteSysApi">
-    </delete>    
-
-    <select id="selectApiRoleCodes">
-    </select>    
-    <delete id="deleteAllApiRoles">
-    </delete>
-
-    <update id="insertApiRoles">
-    
-    </update>         -->
 </mapper>
