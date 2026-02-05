@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -88,6 +87,7 @@ public class RestControllerExceptionAdvice {
         return new ResponseEntity<>(CommonResponseVO.builder()
                 .successOrNot(CommonConstants.NO_FLAG)
                 .statusCode(StatusCodeConstants.INTERNAL_SERVER_ERROR)
-                .build(), HttpStatus.INTERNAL_SERVER_ERROR);
+                .data(e.getClass().getSimpleName())
+                .build(), HttpStatus.OK);
     }
 }

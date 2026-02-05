@@ -1,17 +1,12 @@
 package backend.auth.service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import backend.auth.model.AccessTokenBlackList;
@@ -23,6 +18,7 @@ import backend.auth.repository.RefreshTokenRepository;
 import backend.common.exception.BusinessException;
 import backend.common.util.JwtUtil;
 import backend.common.util.RequestUtil;
+import backend.common.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +40,9 @@ public class AuthServiceImpl implements AuthService {
                 String username = login.getUsername();
                 String password = login.getPassword();
 
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                UserDetailsImpl user = (UserDetailsImpl) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password)).getPrincipal();
 
-                return generateTokens(username, response);
+                return generateTokens(user, response);
         }
 
         @Override
@@ -61,11 +57,12 @@ public class AuthServiceImpl implements AuthService {
                                                 .id(accessToken)
                                                 .token("REFRESH")
                                                 .expiration(jwtUtil.getReaminingTime(accessToken, false))
-                                                .build());
+                                                .build()
+                                   );
 
-                Authentication user = SecurityContextHolder.getContext().getAuthentication();
+                UserDetailsImpl user = SecurityUtil.getUserDetails();
 
-                return generateTokens(user.getName(), response);
+                return generateTokens(user, response);
 
         }
 
@@ -73,8 +70,8 @@ public class AuthServiceImpl implements AuthService {
         public String logout(HttpServletRequest request) {
                 String accessToken = requestUtil.getAccessToken(request);
 
-                String username = jwtUtil.extractUsername(accessToken, false);
-                refreshTokenRepository.deleteById(username);
+                UserDetailsImpl user = SecurityUtil.getUserDetails();
+                refreshTokenRepository.deleteById(user.getUsername());
 
                 long remainTime = jwtUtil.getReaminingTime(accessToken, false);
                 if (remainTime > 0) {
@@ -85,15 +82,16 @@ public class AuthServiceImpl implements AuthService {
                                                         .expiration(remainTime)
                                                         .build());
                 }
-                log.warn("User {} logout successfully", username);
+                log.warn("User {} logout successfully", user.getUsername());
                 return "Log out";
         }
 
-        private LoginResponseVO generateTokens(String username, HttpServletResponse response) {
-                String accessToken = jwtUtil.generateAccessToken(username);
-                String refreshToken = jwtUtil.generateRefreshToken(username);
+        private LoginResponseVO generateTokens(UserDetailsImpl user, HttpServletResponse response) {
+                String accessToken = jwtUtil.generateAccessToken(user.getUserId(), 
+                user.getUsername(), user.getFullname(), user.getEmail(), user.getRoles());
+                String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
                 refreshTokenRepository.save(RefreshTokenWhiteList.builder()
-                                .id(username)
+                                .id(user.getUsername())
                                 .token(refreshToken)
                                 .expiration(jwtUtil.getRefreshExp()).build());
 

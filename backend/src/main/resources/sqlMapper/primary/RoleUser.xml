@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="backend.role.repository.RoleUserRepository">
+
+    <!-- existRoleUsers --> 
+
+    <select id="existRoleUsers" resultType="boolean">
+        SELECT
+        
+    </select>
+
+    <!-- insertRoleUser --> 
+
+    <insert id="insertRoleUser">
+    </insert>
+
+    <delete id="deleteRoleUsers">
+    </delete>
+
+    <select id="selectRolesByUserId">
+    </select>
+</mapper>

@@ -1,7 +1,9 @@
 package backend.auth.service;
 
+import java.util.stream.Collectors;
+
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,10 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found: " + username);
         if (user.getStatus() != 1)
             throw new DisabledException("Account is locked: " + username);
-        return User.builder()
+        return UserDetailsImpl.builder()
+                .userId(user.getId())
                 .username(username)
-                .password(user.getPassword())
-                .roles(user.getRoleCodes())
+                .fullname(user.getFullname())
+                .email(user.getEmail())
+                .roles(user.getUserRoles())
+                
                 .build();
     }
 

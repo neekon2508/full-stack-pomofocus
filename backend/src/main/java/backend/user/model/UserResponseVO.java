@@ -18,11 +18,14 @@ import lombok.Setter;
 public class UserResponseVO {
 
     @Schema(description = "Id", example = "1")
-    private Integer id;
+    private Long id;
 
     @Schema(description = "Username", example = "username")
     private String username;
     
+    @Schema(description = "Fullname", example = "Lionel Messi")
+    private String fullname;
+
     @Schema(description = "email", example = "neekon@gmail.com")
     private String email;
 
