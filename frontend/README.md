@@ -2,13 +2,13 @@
 
 > This project is the actual business backend service of Pomofocus app.
 
---- 
+---
 
 ## Table of Contents
 
 1. [Getting Started](#-Getting-Started)
 
---- 
+---
 
 ## Getting Started
 
@@ -19,7 +19,7 @@
 ### Installation
 
 - Step-by-step guild for cloning the repo and installing.
-  
+
 ### Environment Variables
 
 ### Running the Project
@@ -28,16 +28,16 @@
 
 ## API Endpoints
 
-
 ## Testing
 
 - Instructions on how to run tests, including any specific commands or frameworkd used.
-## Built with 
 
-### Libraries 
+## Built with
+
+### Libraries
 
 - Link: package.json
-- Focus on keywords: sciprt, browserslist 
+- Focus on keywords: sciprt, browserslist
 
 ### Configuration file for Vite
 
@@ -49,15 +49,27 @@
 - Link: src/hooks/queries
 
 ### Make HTTP request
+
 - Library: Axios (https://axios-http.com/docs/intro)
 - Link: src/apis, src/utils/api-utils
 
 ### State Management
+
 - Library: Zustand (https://zustand.docs.pmnd.rs/getting-started/introduction)
 - Link: src/stores
 
+### Validation
+
+- Library: Zod (https://zod.dev/)
+
+### Form Hook
+
+- Library: React Hook Form (https://react-hook-form.com/)
+
 ### CI/CD Tools (Jenkins)
+
 - Link: https://www.youtube.com/playlist?list=PLy7NrYWoggjw_LIiDK1LXdNN82uYuuuiC
+
 ### AWS Deployments
 
 - Files: buildspec.yml, appspec.yml and scripts folder.
