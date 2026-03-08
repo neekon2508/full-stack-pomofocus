@@ -1,0 +1,2 @@
+# buildspec.yml file is used by AWS CodeBuild.
+# It tells CodeBuild how to build your application: install dependencies, run tests, package your code.

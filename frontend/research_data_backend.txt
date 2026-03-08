@@ -1,0 +1,18 @@
+State Management, React Query, Server-side Pagination
+
+-Initilize the search condition:
+searchCondition: useState<LoginHistoryRequest>
+src/models/common/Pagination.ts -> src/models/admin/Login..Request.ts
+-Connect (TanStack Query):
+useLoginHistoriesQuery(searchCondition,{placeholderData: keepPreviousData});
+-Trigger the Query
++handleSearch
++onChangePageSize
++onChangePage
+
+1. Login
+-File: 
+LoginPage.tsx, useLoginMutation.ts (Hook, Tanstack nhan lenh tu UI, kich hoat loading va goii API)
+Session.ts (API), khai bao dia chi /devLogin va kieu du lieu gui di
+api-util.ts (Axios): Cau hinh withCredentials, tu dong gan Header va thuc hien gui tin
+useSessionStore.ts (Zustand) luu tru thong tin nguoi dung (userId...) vao Ram sau khii login.

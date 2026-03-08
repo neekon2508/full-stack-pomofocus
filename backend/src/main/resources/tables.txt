@@ -1,0 +1,9 @@
+Business: Users, Tasks, UserSettings, PomoSessions, User_Roles
+
+Security & Role:SYS_ROLE, SYS_API, SYS_ROLE_API
+
+UI: SYS_MENU, SYS_MENU_ROLE  //Menu Manage
+
+
+
+

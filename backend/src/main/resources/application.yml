@@ -1,0 +1,91 @@
+spring:
+  profiles:
+    group:
+      default: common, default
+      dev: common, dev
+      prd: common, prd
+    active: default
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+  data:
+    redis:
+      port: 6379
+      host: localhost
+      password: secret
+springdoc:
+  packages-to-scan: backend
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+server:
+  port: 7070
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+mybatis:
+  mapper-locations:
+    primary: classpath*:/sqlMapper/primary/**/*.xml
+    secondary: classpath*:/sqlMapper/secondary/**/*/xml
+  type-aliases-package: backend.**.model
+  configuration:
+    return-instance-for-empty-row: false
+
+jwt:
+  access-token-secret-key: access-secret-key-access-secret-key
+  refresh-token-secret-key: refresh-secret-key-refresh-secret-key
+  access-token-expiration-time: 1000
+  refresh-token-expiration-time: 604800
+
+request:
+  cookie:
+    refresh-cookie-name: POMOFOCUS_REFRESH-TOKEN
+
+google:
+  client-id: ${GOOGLE_CLIENT_ID:-unsed}
+  client-secret: ${GOOGLE_CLIENT_SECRET:-unused}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+    import:
+      - classpath:config/default/config.yml
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - classpath:config/dev/config.yml
+---
+spring:
+  config:
+    activate:
+      on-profile: prd
+    import:
+      - classpath:config/prd/config.yml

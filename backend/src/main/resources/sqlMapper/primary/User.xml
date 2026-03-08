@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.user.repository.UserRepository">
+
+    <!-- selectUsers --> 
+
+    <select id="findUserByName" resultType="backend.user.model.UserResponseVO">
+        SELECT U.id
+             , U.username
+             , U.email
+             , U.password
+             , U.status
+             , GROUP_CONCAT(R.role_code) AS roleCodes
+        FROM users U
+        LEFT JOIN user_role UR ON U.id = UR.user_id
+        LEFT JOIN sys_roles R ON UR.role_id = R.id
+        WHERE U.username=#{username}
+        GROUP BY 
+            U.id
+          , U.username
+          , U.email
+          , U.password
+          , U.status
+    </select>
+</mapper>

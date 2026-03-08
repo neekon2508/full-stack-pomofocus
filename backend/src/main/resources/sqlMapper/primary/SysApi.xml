@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.api.repository.SysApiRepository">
+    <select id="selectSysApis" resultType="backend.api.model.SysApiResponseVO">
+        SELECT 
+               A.id 
+             , MAX(A.api_name) AS apiName
+             , MAX(A.api_url) AS apiUrl
+             , MAX(A.api_method) AS apiMethod
+             , MAX(A.api_code) AS apiCode
+             , GROUP_CONCAT(DISTINCT R.role_code ORDER BY R.role_code SEPARATOR ', ') AS roleCodes      
+        FROM sys_apis A
+        LEFT JOIN sys_role_api RA ON A.id= RA.api_id
+        LEFT JOIN sys_roles R ON RA.role_id = R.id
+        
+        WHERE 1=1
+        <if test='sysApiCondition.apiName != null and sysApiCondition.apiName != ""'>
+            AND UPPER(A.api_name) LIKE CONCAT('%', UPPER(#{sysApiCondition.apiName, typeHandler=backend.common.handler.LikeEscapeTypeHandler}), '%')
+        </if>
+        <if test='sysApiCondition.apiUrl != null and sysApiCondition.apiUrl != ""'>
+            AND UPPER(A.api_url) LIKE CONCAT('%', UPPER(#{sysApiCondition.apiUrl, typeHandler=backend.common.handler.LikeEscapeTypeHandler}), '%')
+        </if>
+        GROUP BY A.id
+    </select>
+
+    <insert id="insertSysApi">
+        INSERT INTO sys_apis
+            ( api_name
+            , api_url
+            , api_method
+            , api_code
+            )
+        VALUES
+            ( #{sysApi.apiName}
+            , #{sysApi.apiUrl}
+            , #{sysApi.apiMethod}
+            , #{sysApi.apiCode}
+            )
+    </insert>
+
+    <select id="existSysApi" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM sys_apis A
+            WHERE A.api_url = #{sysApi}
+              AND A.api_method = #{httpMethodCode} 
+        )
+    </select>
+
+    <select id="checkAccessibleApiUrlByRoleCodes" resultType="boolean">
+        SELECT
+            CASE
+                WHEN COUNT(*) > 0 THEN 1
+                ELSE 0
+            END
+        FROM sys_apis A
+        INNER JOIN sys_role_api RA ON A.id = RA.api_id
+        INNER JOIN sys_roles R ON RA.role_id = R.id
+        WHERE A.api_url = #{apiUrl}
+          AND A.api_method = #{httpMethodCode}   
+          AND R.role_code IN 
+            <foreach item="role" collection="roleCodes" open="(" separator="," close=")">
+                #{role}
+            </foreach>
+    </select>
+</mapper>
