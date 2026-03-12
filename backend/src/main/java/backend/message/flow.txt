@@ -1,0 +1,20 @@
+1. Khởi động ứng dụng (refreshMessageAll)
+ApplicationReadyEvent → selectMessagesAllCache() từ DB
+→ xóa toàn bộ i18nCache
+→ nạp lại cache với key = msgCtn + langCd
+   Ví dụ: "common.button.save" + "ko" → MessageSimpleVO
+Được bật/tắt bằng config i18n.upload-cache-on-start.
+2. Lấy message theo key (findMessageCache)
+@Cacheable → nếu cache HIT → trả về ngay
+             nếu cache MISS → query DB → lưu cache → trả về
+             nếu không tìm thấy → trả về chính msgCtn làm fallback
+3. Deploy ra file JSON (deployTranslatedMessages)
+Query DB tất cả message theo langCd
+→ unescape ký tự đặc biệt
+→ convert sang Map<key, text>
+→ ghi ra file: message_ko.json / message_en.json / ...
+Frontend có thể load trực tiếp file JSON này (kiểu i18next).
+4. Chỉnh sửa message (modifyMessage)
+Update DB
+→ @CacheEvict xóa cache của tất cả 5 ngôn ngữ hardcode:
+   ko, en, zhC, zhT, pl

@@ -48,6 +48,11 @@
 - Slient Refresh: AT expired => Backend return 401. Frontend doesn't error to client but send /auth/refresh. Backend then checks whitelist, if equal, blacklist AT and create new AT and RT, update whitelist. Client get new AT and reuse request.
 - Logout: delete RT whitelist, get current AT and push in blacklist with TTL = remain time of AT.
 
+### i18n
+- Link: medium.com/@AlexanderObregon/how-to-implement-internationalization-i18n-in-spring-boot-aea2c62c1bfa
+- LocalResolver, LocaleContextHolder
+- Don't need to make LocaleInterceptor component because it doesn't need to autowire any service
+- hibrid approach: save messages in Database + cache in memory + deploy to JSON file.
 ### RBAC (Role-Based Access Control)
 
 ### Dynamic Menu

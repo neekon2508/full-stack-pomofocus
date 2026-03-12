@@ -83,6 +83,10 @@ CREATE TABLE IF NOT EXISTS sys_role_api (
     FOREIGN KEY (role_id) REFERENCES sys_roles(id) ON DELETE CASCADE,
     FOREIGN KEY (api_id) REFERENCES sys_apis(id) ON DELETE CASCADE
 );
+-- ==========================================================
+-- 4. NHÓM i18n
+-- ==========================================================
+
 
 -- ==========================================================
 -- 4. NHÓM UI: DYNAMIC MENU
@@ -106,3 +110,66 @@ CREATE TABLE IF NOT EXISTS sys_role_api (
 --     FOREIGN KEY (menu_id) REFERENCES sys_menus(id) ON DELETE CASCADE,
 --     FOREIGN KEY (role_id) REFERENCES sys_roles(id) ON DELETE CASCADE
 -- );
+-- 1. Bảng language
+CREATE TABLE language (
+    lang_cd       VARCHAR(10)   NOT NULL COMMENT 'Mã ngôn ngữ (vi, en)',
+    lang_nm       VARCHAR(100)  NOT NULL COMMENT 'Tên ngôn ngữ hiển thị',
+    is_active     TINYINT(1)    NOT NULL DEFAULT 1,
+    sort_order    INT           NOT NULL DEFAULT 0,
+    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (lang_cd)
+);
+
+INSERT INTO language (lang_cd, lang_nm, sort_order) VALUES
+    ('vi',  'VN',   1),
+    ('en',  'English',  2),
+
+-- 2. Bảng message_key
+CREATE TABLE message_key (
+    msg_key_id    BIGINT        NOT NULL AUTO_INCREMENT COMMENT 'Surrogate PK',
+    msg_ctn       VARCHAR(200)  NOT NULL COMMENT 'i18n key (vd: common.button.save)',
+    module_nm     VARCHAR(100)  NULL     COMMENT 'Module sở hữu key (common, area-region...)',
+    description   VARCHAR(500)  NULL     COMMENT 'Ghi chú cho translator',
+    is_active     TINYINT(1)    NOT NULL DEFAULT 1,
+    frst_rgst_id  VARCHAR(50)   NULL,
+    frst_rgst_dt  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_mdfy_id  VARCHAR(50)   NULL,
+    last_mdfy_dt  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (msg_key_id),
+    UNIQUE KEY uq_msg_ctn (msg_ctn)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Master table cho tất cả i18n key';
+
+
+-- 3. Bảng message_translation
+CREATE TABLE message_translation (
+    msg_key_id    BIGINT        NOT NULL COMMENT 'FK -> message_key',
+    lang_cd       VARCHAR(10)   NOT NULL COMMENT 'FK -> language',
+    msg_txt_ctn   TEXT          NOT NULL COMMENT 'Nội dung đã dịch',
+    frst_rgst_id  VARCHAR(50)   NULL,
+    frst_rgst_dt  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_mdfy_id  VARCHAR(50)   NULL,
+    last_mdfy_dt  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (msg_key_id, lang_cd),
+    CONSTRAINT fk_mt_key  FOREIGN KEY (msg_key_id) REFERENCES message_key (msg_key_id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_mt_lang FOREIGN KEY (lang_cd)    REFERENCES language (lang_cd)
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_mt_lang (lang_cd)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Nội dung dịch theo ngôn ngữ';
+
+
+-- 4. View tiện lợi cho Service layer
+CREATE OR REPLACE VIEW v_message AS
+SELECT
+    mk.msg_key_id,
+    mk.msg_ctn,
+    mk.module_nm,
+    mt.lang_cd,
+    mt.msg_txt_ctn,
+    mt.frst_rgst_id,
+    mt.frst_rgst_dt,
+    mt.last_mdfy_id,
+    mt.last_mdfy_dt
+FROM message_key mk
+INNER JOIN message_translation mt ON mk.msg_key_id = mt.msg_key_id
+WHERE mk.is_active = 1;

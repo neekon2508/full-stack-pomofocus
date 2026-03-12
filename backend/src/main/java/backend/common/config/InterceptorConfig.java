@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import backend.common.interceptor.AuthorizationInterceptor;
+import backend.common.interceptor.LocaleInterceptor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -27,5 +28,8 @@ public class InterceptorConfig implements WebMvcConfigurer{
         registry.addInterceptor(authorizationInterceptor)
                 .addPathPatterns(urlPatterns)
                 .excludePathPatterns(authorizationExcludePaths);
+        LocaleInterceptor localeInterceptor = new LocaleInterceptor();
+        localeInterceptor.setParamName("landCd");
+        registry.addInterceptor(localeInterceptor);
     }
 }
