@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.code.repository.CommonCodeRepository">
+    
+
+    <!-- selectCommonCodes --> 
+
+    <select id="selectCommonCodes" resultType="backend.code.model.CommonCodeResponseVO">
+        SELECT common_group_code
+              ,common_code  
+              ,common_code_name
+              ,message_key
+              ,common_code_description
+              ,upper_common_code
+              ,sort_order
+              ,use_yn
+              ,optional_value_key1
+              ,optional_value_key2
+              ,optional_value_key3
+        FROM common_code
+        WHERE common_group_code = #{commonGroupCode}
+        ORDER BY sort_order
+    </select>
+    
+</mapper>

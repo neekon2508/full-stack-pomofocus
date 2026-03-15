@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.message.repository.MessageRepository">
+
+    <!-- selectTranslatedMessages --> 
+
+    <select id="selectTranslatedMessages" resultType="backend.message.model.MessageVO">
+        SELECT message_key,
+               message_text
+        FROM message_translation
+        WHERE 1=1
+            AND lang_code= #{langCode}
+    </select>
+
+    <select id="selectMessageCache" resultType="backend.message.model.MessageSimpleVO">
+        SELECT message_key
+              ,lang_code
+              ,message_text
+        WHERE message_key = #{messageKey}
+          AND lang_code = #{langCode}
+    </select>
+
+    <select id="selectMessagesAllCache" resultType="backend.message.model.MessageSimpleVO">
+        SELECT message_key
+              ,lang_code
+              ,message_text
+        FROM message_translation
+    </select>
+
+    <insert id="insertMessage">
+        INSERT INTO message_translation (
+            message_key
+           ,lang_code
+           ,message_text 
+        )
+        VALUES (
+            #{message.message_key}
+           ,#{message.lang_code}
+           ,#{message.message_text} 
+        )
+    </insert>
+
+    <update id="updateMessage">
+        UPDATE message_translation
+            SET message_text = #{message.message_text}
+        WHERE message_key = #{message_key}
+          AND lang_code = #{message.lang_code}
+    </update>
+
+    <delete id="deleteMessage" parameterType="backend.message.model.MessageVO">
+        DELETE FROM message_translation
+            WHERE message_key = #{message_key}
+              AND lang_code = #{message.lang_code}
+    </delete>
+
+</mapper>

@@ -10,10 +10,10 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor(access =  AccessLevel.PRIVATE)
-public class CrudVO {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public abstract class CrudVO {
 
-    @Schema(description = "Crud Key", example = "C", allowableValues = {"C", "R", "U", "D"})
+    @Schema(description = "Crud Key", example = "C", allowableValues = { "C", "R", "U", "D" })
     private String crudKey;
 
     public String getCrudKey() {

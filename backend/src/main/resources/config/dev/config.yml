@@ -1,12 +1,12 @@
 spring:
   datasource:
     primary:
-      driver-class-name: 
+      driver-class-name:
       jdbc-url:
       username:
       password:
     secondary:
-      driver-class-name: 
+      driver-class-name:
       jdbc-url:
       username:
       password:
@@ -19,6 +19,10 @@ spring:
 jasypt:
   encryptor:
     password: Ami2025!
+
+i18n:
+  message-file-path: "/sorc001/locale/"
+  upload-cache-on-start: true
 
 interceptor:
   authentication:
